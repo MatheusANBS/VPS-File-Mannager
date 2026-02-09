@@ -62,6 +62,8 @@ cd VPS-File-Mannager
 
 ## <img src="assets/icons/lightbulb.svg" width="24" height="24" /> Por que VPS File Manager
 
+<div></div>
+
 <table>
 <tr>
 <td width="50%">
