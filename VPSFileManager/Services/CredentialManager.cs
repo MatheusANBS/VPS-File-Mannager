@@ -12,7 +12,8 @@ namespace VPSFileManager.Services
     public class CredentialManager
     {
         private readonly string _filePath;
-        private static readonly byte[] _entropy = Encoding.UTF8.GetBytes("VPSFileManager2024");
+        private readonly string _entropyFilePath;
+        private static byte[] _entropy;
 
         public CredentialManager()
         {
@@ -23,6 +24,10 @@ namespace VPSFileManager.Services
                 Directory.CreateDirectory(folder);
             
             _filePath = Path.Combine(folder, "connections.json");
+            _entropyFilePath = Path.Combine(folder, ".entropy");
+            
+            // Gerar ou carregar entropia aleatória
+            _entropy = LoadOrGenerateEntropy();
         }
 
         public List<SavedConnection> LoadConnections()
@@ -100,23 +105,104 @@ namespace VPSFileManager.Services
 
         public void SaveConnections(List<SavedConnection> connections)
         {
-            // Criptografar senhas antes de salvar
-            var toSave = connections.Select(c => new SavedConnection
+            var tempFile = _filePath + ".tmp";
+            
+            try
             {
-                Id = c.Id,
-                Name = c.Name,
-                Host = c.Host,
-                Port = c.Port,
-                Username = c.Username,
-                EncryptedPassword = !string.IsNullOrEmpty(c.Password) ? EncryptPassword(c.Password) : "",
-                UsePrivateKey = c.UsePrivateKey,
-                PrivateKeyPath = c.PrivateKeyPath,
-                FavoritePaths = c.FavoritePaths ?? new List<string>(),
-                Password = "" // Não salvar senha em texto plano
-            }).ToList();
+                // Criptografar senhas antes de salvar
+                var toSave = connections.Select(c => new SavedConnection
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Host = c.Host,
+                    Port = c.Port,
+                    Username = c.Username,
+                    EncryptedPassword = !string.IsNullOrEmpty(c.Password) ? EncryptPassword(c.Password) : "",
+                    UsePrivateKey = c.UsePrivateKey,
+                    PrivateKeyPath = c.PrivateKeyPath,
+                    FavoritePaths = c.FavoritePaths ?? new List<string>(),
+                    Password = "" // Não salvar senha em texto plano
+                }).ToList();
 
-            var json = JsonSerializer.Serialize(toSave, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(_filePath, json);
+                var json = JsonSerializer.Serialize(toSave, new JsonSerializerOptions { WriteIndented = true });
+                
+                // Escrever em arquivo temporário primeiro
+                File.WriteAllText(tempFile, json);
+                
+                // Limpar backups antigos antes de criar novo
+                CleanOldBackups();
+                
+                // Criar backup do arquivo atual (se existir)
+                if (File.Exists(_filePath))
+                {
+                    var backupPath = _filePath + ".bak";
+                    try
+                    {
+                        File.Copy(_filePath, backupPath, overwrite: true);
+                    }
+                    catch { /* Ignorar erro de backup */ }
+                }
+                
+                // Mover arquivo temporário atomicamente
+                if (File.Exists(_filePath))
+                    File.Delete(_filePath);
+                File.Move(tempFile, _filePath);
+            }
+            finally
+            {
+                // Limpar arquivo temporário se ainda existir
+                try
+                {
+                    if (File.Exists(tempFile))
+                        File.Delete(tempFile);
+                }
+                catch { /* Ignorar */ }
+            }
+        }
+
+        /// <summary>
+        /// Remove backups antigos de credenciais (mantém apenas o mais recente)
+        /// </summary>
+        private void CleanOldBackups()
+        {
+            try
+            {
+                var directory = Path.GetDirectoryName(_filePath);
+                if (string.IsNullOrEmpty(directory) || !Directory.Exists(directory))
+                    return;
+
+                var fileName = Path.GetFileName(_filePath);
+                var backupPattern = fileName + ".bak*";
+                
+                // Encontrar todos os arquivos de backup
+                var backupFiles = Directory.GetFiles(directory, backupPattern)
+                    .OrderByDescending(f => File.GetLastWriteTime(f))
+                    .ToList();
+                
+                // Manter apenas o backup mais recente, deletar os outros
+                foreach (var oldBackup in backupFiles.Skip(1))
+                {
+                    try
+                    {
+                        File.Delete(oldBackup);
+                    }
+                    catch { /* Ignorar erros individuais */ }
+                }
+                
+                // Deletar também .tmp antigos (mais de 1 dia)
+                var tempFiles = Directory.GetFiles(directory, "*.tmp")
+                    .Where(f => (DateTime.Now - File.GetLastWriteTime(f)).TotalDays > 1);
+                
+                foreach (var tempFile in tempFiles)
+                {
+                    try
+                    {
+                        File.Delete(tempFile);
+                    }
+                    catch { /* Ignorar */ }
+                }
+            }
+            catch { /* Não é crítico se limpeza falhar */ }
         }
 
         public void AddConnection(SavedConnection connection)
@@ -177,6 +263,42 @@ namespace VPSFileManager.Services
             {
                 return "";
             }
+        }
+
+        /// <summary>
+        /// Carrega ou gera entropia aleatória para DPAPI
+        /// </summary>
+        private byte[] LoadOrGenerateEntropy()
+        {
+            try
+            {
+                // Tentar carregar entropia existente
+                if (File.Exists(_entropyFilePath))
+                {
+                    var entropyData = File.ReadAllBytes(_entropyFilePath);
+                    if (entropyData.Length == 32)
+                        return entropyData;
+                }
+            }
+            catch { /* Ignorar e gerar nova */ }
+
+            // Gerar nova entropia aleatória de 256 bits
+            var newEntropy = new byte[32];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(newEntropy);
+            }
+
+            // Salvar entropia para uso futuro
+            try
+            {
+                File.WriteAllBytes(_entropyFilePath, newEntropy);
+                // Definir arquivo como oculto/sistema
+                File.SetAttributes(_entropyFilePath, FileAttributes.Hidden | FileAttributes.System);
+            }
+            catch { /* Não é crítico se falhar */ }
+
+            return newEntropy;
         }
     }
 

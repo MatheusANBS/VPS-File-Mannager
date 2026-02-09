@@ -261,7 +261,7 @@ Write-Host "=====================================" -ForegroundColor Green
 Write-Host "BUILD CONCLUÍDO COM SUCESSO!" -ForegroundColor Green
 Write-Host "=====================================" -ForegroundColor Green
 Write-Host ""
-Write-Host "Executável: $projectPath\bin\$Configuration\net48\VPSFileManager.exe" -ForegroundColor Cyan
+Write-Host "Executável: $projectPath\bin\$Configuration\net8.0-windows\VPSFileManager.exe" -ForegroundColor Cyan
 
 if (-not $SkipInstaller -and $innoSetupPath) {
     Write-Host "Instalador: $projectPath\Installer\VPSFileManager-Setup.exe" -ForegroundColor Cyan
