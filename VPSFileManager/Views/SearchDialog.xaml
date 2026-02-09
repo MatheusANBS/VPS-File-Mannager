@@ -1,0 +1,100 @@
+<ui:FluentWindow x:Class="VPSFileManager.Views.SearchDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        mc:Ignorable="d"
+        Title="Search Files"
+        Height="600" Width="800"
+        MinHeight="500" MinWidth="700"
+        WindowStartupLocation="CenterOwner"
+        ExtendsContentIntoTitleBar="True"
+        WindowBackdropType="None"
+        Background="{DynamicResource ApplicationBackgroundBrush}"
+        Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title Bar -->
+        <ui:TitleBar Title="Search Files" Grid.Row="0"/>
+
+        <!-- Main Content -->
+        <Border Grid.Row="1" Padding="20">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Search Options -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,16">
+                    <TextBlock Text="SEARCH CRITERIA" FontSize="10" FontWeight="Bold" Opacity="0.5" Margin="0,0,0,12"/>
+                    
+                    <!-- Search Pattern -->
+                    <TextBlock Text="Search Pattern" FontSize="11" FontWeight="Medium" Margin="0,0,0,6"/>
+                    <ui:TextBox x:Name="SearchPatternBox" PlaceholderText="e.g., nginx, *.pdf, config.json" Padding="12,8" Height="40" Margin="0,0,0,12"/>
+                    
+                    <!-- Start Path -->
+                    <TextBlock Text="Search From" FontSize="11" FontWeight="Medium" Margin="0,0,0,6"/>
+                    <ui:TextBox x:Name="SearchPathBox" Text="/" Padding="12,8" Height="40" Margin="0,0,0,12"/>
+                    
+                    <!-- Options -->
+                    <CheckBox x:Name="RecursiveCheckBox" Content="Recursive (search in subdirectories)" IsChecked="True" Margin="0,0,0,8"/>
+                    <CheckBox x:Name="CaseSensitiveCheckBox" Content="Case sensitive" Margin="0,0,0,8"/>
+                    
+                    <!-- Search Button -->
+                    <ui:Button Content="Search" Icon="{ui:SymbolIcon Search24}" Appearance="Primary" HorizontalAlignment="Stretch" Padding="12,10" Click="Search_Click" Margin="0,8,0,0"/>
+                </StackPanel>
+
+                <!-- Status -->
+                <TextBlock x:Name="StatusText" Grid.Row="1" Text="Enter a search pattern and click Search" FontSize="11" Opacity="0.6" Margin="0,0,0,8"/>
+
+                <!-- Results -->
+                <Border Grid.Row="2" Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="8" Padding="0">
+                    <Grid>
+                        <TextBlock Text="Results will appear here" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.3" FontSize="13" Visibility="{Binding ElementName=ResultsListBox, Path=Items.Count, Converter={StaticResource ZeroToVisibilityConverter}}"/>
+                        
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <ListBox x:Name="ResultsListBox" Background="Transparent" BorderThickness="0" SelectionMode="Single" MouseDoubleClick="ResultItem_DoubleClick">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="12,8" Background="Transparent">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                
+                                                <ui:SymbolIcon Symbol="{Binding Icon}" FontSize="20" Margin="0,0,12,0"/>
+                                                
+                                                <StackPanel Grid.Column="1">
+                                                    <TextBlock Text="{Binding Name}" FontWeight="Medium" FontSize="12"/>
+                                                    <TextBlock Text="{Binding FullPath}" FontSize="10" Opacity="0.6"/>
+                                                </StackPanel>
+                                                
+                                                <TextBlock Grid.Column="2" Text="{Binding FormattedSize}" FontSize="10" Opacity="0.5" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+
+                <!-- Buttons -->
+                <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+                    <ui:Button Content="Close" Appearance="Transparent" Padding="24,8" Click="Close_Click" MinWidth="100"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</ui:FluentWindow>

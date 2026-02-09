@@ -1,0 +1,69 @@
+<ui:FluentWindow x:Class="VPSFileManager.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:vm="clr-namespace:VPSFileManager.ViewModels"
+        Title="Settings" 
+        Height="500" Width="450"
+        WindowStartupLocation="CenterOwner"
+        WindowBackdropType="None"
+        Background="{DynamicResource ApplicationBackgroundBrush}"
+        Foreground="{DynamicResource TextFillColorPrimaryBrush}">
+
+    <Window.DataContext>
+        <vm:SettingsViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="32">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,32">
+            <TextBlock Text="Settings" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+            <TextBlock Text="Manage your preferences" FontSize="13" Opacity="0.5" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0"/>
+        </StackPanel>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1">
+            <StackPanel>
+                <ui:Card Padding="20" Margin="0,0,0,16">
+                    <StackPanel>
+                        <TextBlock Text="Appearance" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,16"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock Text="Active Theme" FontWeight="Medium"/>
+                                <TextBlock Text="GitHub Dark (Internal)" FontSize="12" Opacity="0.5" Margin="0,4,0,0"/>
+                            </StackPanel>
+                            <ui:SymbolIcon Grid.Column="1" Symbol="CheckmarkCircle24" Foreground="{DynamicResource SuccessBrush}"/>
+                        </Grid>
+                    </StackPanel>
+                </ui:Card>
+
+                <ui:Card Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="Application" FontSize="16" FontWeight="SemiBold" Margin="0,0,0,16"/>
+                        <TextBlock Text="Settings are preserved across sessions automatically." FontSize="12" Opacity="0.5"/>
+                    </StackPanel>
+                </ui:Card>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer -->
+        <ui:Button Grid.Row="2" 
+                   Content="Done" 
+                   Command="{Binding CloseCommand}" 
+                   Appearance="Primary" 
+                   HorizontalAlignment="Right" 
+                   Padding="32,12" 
+                   Margin="0,24,0,0"
+                   Icon="{ui:SymbolIcon Checkmark24}"/>
+    </Grid>
+</ui:FluentWindow>
