@@ -21,10 +21,9 @@
 </p>
 
 <p align="center">
-  <!-- Stats & Status Badges -->
-  <img src="https://img.shields.io/github/v/release/MatheusANBS/VPS-File-Mannager?style=flat-square" alt="Latest Release" />
-  <img src="https://img.shields.io/github/downloads/MatheusANBS/VPS-File-Mannager/total?style=flat-square" alt="Total Downloads" />
-  <img src="https://img.shields.io/github/actions/workflow/status/MatheusANBS/VPS-File-Mannager/build.yml?style=flat-square" alt="Build Status" />
+  <!-- Stats & Status Badges (com cache para evitar rate limiting) -->
+  <img src="https://img.shields.io/github/v/release/MatheusANBS/VPS-File-Mannager?style=flat-square&cacheSeconds=3600" alt="Latest Release" />
+  <img src="https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square" alt="Status" />
   <img src="https://img.shields.io/badge/Windows-10%2F11-0078D6?style=flat-square&logo=windows&logoColor=white" alt="Windows" />
 </p>
 
