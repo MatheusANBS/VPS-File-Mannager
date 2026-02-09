@@ -14,7 +14,7 @@
 
 <p align="center">
   <!-- Tech Stack Badges -->
-  <img src="https://img.shields.io/badge/.NET%20Framework-4.8-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET Framework" />
+  <img src="https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET 8.0" />
   <img src="https://img.shields.io/badge/WPF-UI%203.0-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="WPF-UI" />
   <img src="https://img.shields.io/badge/SSH.NET-2023.0.1-green?style=for-the-badge&logo=gnubash&logoColor=white" alt="SSH.NET" />
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License" />
@@ -237,7 +237,7 @@ Gerenciar servidores VPS exige múltiplas ferramentas desconectadas. Você perde
 │  │  (SFTP/SSH) │  │ (Crypto)    │  │ (xterm emulator)    │  │
 │  └─────────────┘  └─────────────┘  └─────────────────────┘  │
 ├─────────────────────────────────────────────────────────────┤
-│  .NET Framework 4.8                                          │
+│  .NET 8.0                                                    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
