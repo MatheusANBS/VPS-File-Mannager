@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Monaco Editor</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #1e1e1e; }
+#editor-container { width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+<div id="editor-container"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
+<script>
+// ====================================================================
+// Monaco Editor wrapper para WPF WebView2
+// Expõe API via window.chrome.webview.postMessage / hostObjects
+// ====================================================================
+
+let editor = null;
+let currentLanguage = 'plaintext';
+let isDirty = false;
+let originalContent = '';
+
+// Configurar Monaco loader
+require.config({
+    paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs' }
+});
+
+// Configurar worker proxy (necessário para CDN)
+window.MonacoEnvironment = {
+    getWorkerUrl: function(workerId, label) {
+        return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+            self.MonacoEnvironment = { baseUrl: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/' };
+            importScripts('https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/base/worker/workerMain.js');
+        `)}`;
+    }
+};
+
+require(['vs/editor/editor.main'], function() {
+    // Definir tema VS Code Dark+ (replicação fiel)
+    monaco.editor.defineTheme('vscode-dark-plus', {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [
+            { token: 'comment', foreground: '6A9955', fontStyle: 'italic' },
+            { token: 'comment.block', foreground: '6A9955', fontStyle: 'italic' },
+            { token: 'comment.line', foreground: '6A9955', fontStyle: 'italic' },
+            { token: 'string', foreground: 'CE9178' },
+            { token: 'string.escape', foreground: 'D7BA7D' },
+            { token: 'keyword', foreground: '569CD6' },
+            { token: 'keyword.control', foreground: 'C586C0' },
+            { token: 'keyword.operator', foreground: 'D4D4D4' },
+            { token: 'number', foreground: 'B5CEA8' },
+            { token: 'number.float', foreground: 'B5CEA8' },
+            { token: 'number.hex', foreground: 'B5CEA8' },
+            { token: 'type', foreground: '4EC9B0' },
+            { token: 'type.identifier', foreground: '4EC9B0' },
+            { token: 'class', foreground: '4EC9B0' },
+            { token: 'interface', foreground: '4EC9B0' },
+            { token: 'struct', foreground: '4EC9B0' },
+            { token: 'enum', foreground: '4EC9B0' },
+            { token: 'function', foreground: 'DCDCAA' },
+            { token: 'function.declaration', foreground: 'DCDCAA' },
+            { token: 'variable', foreground: '9CDCFE' },
+            { token: 'variable.predefined', foreground: '4FC1FF' },
+            { token: 'constant', foreground: '4FC1FF' },
+            { token: 'parameter', foreground: '9CDCFE' },
+            { token: 'property', foreground: '9CDCFE' },
+            { token: 'tag', foreground: '569CD6' },
+            { token: 'attribute.name', foreground: '9CDCFE' },
+            { token: 'attribute.value', foreground: 'CE9178' },
+            { token: 'delimiter', foreground: 'D4D4D4' },
+            { token: 'delimiter.bracket', foreground: 'FFD700' },
+            { token: 'operator', foreground: 'D4D4D4' },
+            { token: 'regexp', foreground: 'D16969' },
+            { token: 'annotation', foreground: 'DCDCAA' },
+            { token: 'decorator', foreground: 'DCDCAA' },
+            { token: 'namespace', foreground: '4EC9B0' },
+            { token: 'metatag', foreground: '569CD6' },
+            { token: 'metatag.content', foreground: 'CE9178' },
+        ],
+        colors: {
+            'editor.background': '#1e1e1e',
+            'editor.foreground': '#d4d4d4',
+            'editorLineNumber.foreground': '#858585',
+            'editorLineNumber.activeForeground': '#c6c6c6',
+            'editor.selectionBackground': '#264f78',
+            'editor.inactiveSelectionBackground': '#3a3d41',
+            'editorIndentGuide.background1': '#404040',
+            'editorIndentGuide.activeBackground1': '#707070',
+            'editor.lineHighlightBackground': '#2a2d2e',
+            'editor.lineHighlightBorder': '#282828',
+            'editorCursor.foreground': '#aeafad',
+            'editorWhitespace.foreground': '#e3e4e229',
+            'editorBracketMatch.background': '#0064001a',
+            'editorBracketMatch.border': '#888888',
+            'editor.findMatchBackground': '#515c6a',
+            'editor.findMatchHighlightBackground': '#ea5c0055',
+            'editorOverviewRuler.findMatchForeground': '#d186167e',
+            'editorGutter.background': '#1e1e1e',
+            'scrollbarSlider.background': '#79797966',
+            'scrollbarSlider.hoverBackground': '#646464b3',
+            'scrollbarSlider.activeBackground': '#bfbfbf66',
+            'minimap.background': '#1e1e1e',
+            'editorWidget.background': '#252526',
+            'editorWidget.border': '#454545',
+            'editorSuggestWidget.background': '#252526',
+            'editorSuggestWidget.border': '#454545',
+            'editorSuggestWidget.selectedBackground': '#04395e',
+            'editorHoverWidget.background': '#252526',
+            'editorHoverWidget.border': '#454545',
+        }
+    });
+
+    // Criar o editor
+    editor = monaco.editor.create(document.getElementById('editor-container'), {
+        value: '',
+        language: 'plaintext',
+        theme: 'vscode-dark-plus',
+        
+        // Configurações idênticas ao VS Code
+        fontFamily: "'Cascadia Code', 'Cascadia Mono', Consolas, 'Courier New', monospace",
+        fontSize: 14,
+        fontLigatures: true,
+        lineHeight: 20,
+        letterSpacing: 0,
+        
+        // Comportamento
+        automaticLayout: true,
+        wordWrap: 'off',
+        minimap: { enabled: true, maxColumn: 120, renderCharacters: true, scale: 1, showSlider: 'mouseover' },
+        scrollBeyondLastLine: true,
+        smoothScrolling: true,
+        cursorBlinking: 'blink',
+        cursorSmoothCaretAnimation: 'on',
+        cursorStyle: 'line',
+        cursorWidth: 2,
+        
+        // Line numbers & guides
+        lineNumbers: 'on',
+        glyphMargin: true,
+        folding: true,
+        foldingStrategy: 'indentation',
+        showFoldingControls: 'mouseover',
+        renderIndentGuides: true,
+        
+        // Bracket matching & auto
+        matchBrackets: 'always',
+        autoClosingBrackets: 'always',
+        autoClosingQuotes: 'always',
+        autoIndent: 'full',
+        autoSurround: 'languageDefined',
+        
+        // Suggestions
+        quickSuggestions: true,
+        suggestOnTriggerCharacters: true,
+        acceptSuggestionOnEnter: 'on',
+        tabCompletion: 'on',
+        parameterHints: { enabled: true },
+        
+        // Renderização
+        renderWhitespace: 'selection',
+        renderControlCharacters: false,
+        renderLineHighlight: 'all',
+        renderLineHighlightOnlyWhenFocus: false,
+        
+        // Scrollbar
+        scrollbar: {
+            vertical: 'auto',
+            horizontal: 'auto',
+            verticalScrollbarSize: 14,
+            horizontalScrollbarSize: 10,
+            useShadows: true
+        },
+        
+        // Outros
+        mouseWheelZoom: true,
+        multiCursorModifier: 'alt',
+        dragAndDrop: true,
+        links: true,
+        colorDecorators: true,
+        bracketPairColorization: { enabled: true, independentColorPoolPerBracketType: true },
+        guides: { bracketPairs: true, indentation: true, highlightActiveIndentation: true },
+        stickyScroll: { enabled: true },
+        
+        // Find widget
+        find: {
+            addExtraSpaceOnTop: true,
+            autoFindInSelection: 'multiline',
+            seedSearchStringFromSelection: 'always'
+        },
+        
+        // Padding como VS Code
+        padding: { top: 4, bottom: 4 },
+    });
+
+    // ================================================================
+    // Event bindings — notificar o WPF host via postMessage
+    // ================================================================
+
+    // Content changes
+    editor.onDidChangeModelContent(function(e) {
+        isDirty = (editor.getValue() !== originalContent);
+        notifyHost('contentChanged', {
+            isDirty: isDirty,
+            lineCount: editor.getModel().getLineCount(),
+            content: editor.getValue()
+        });
+    });
+
+    // Cursor position changes
+    editor.onDidChangeCursorPosition(function(e) {
+        notifyHost('cursorChanged', {
+            lineNumber: e.position.lineNumber,
+            column: e.position.column
+        });
+    });
+
+    // Selection changes
+    editor.onDidChangeCursorSelection(function(e) {
+        var sel = e.selection;
+        var text = editor.getModel().getValueInRange(sel);
+        notifyHost('selectionChanged', {
+            startLine: sel.startLineNumber,
+            startColumn: sel.startColumn,
+            endLine: sel.endLineNumber,
+            endColumn: sel.endColumn,
+            selectedText: text.length > 1000 ? text.substring(0, 1000) : text,
+            selectedLength: text.length
+        });
+    });
+
+    // Keyboard shortcuts (Ctrl+S)
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, function() {
+        notifyHost('save', { content: editor.getValue() });
+    });
+
+    // Ctrl+W close
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyW, function() {
+        notifyHost('close', {});
+    });
+
+    // Ctrl+Z / Ctrl+Y tracked for undo/redo state
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyZ, function() {
+        editor.trigger('keyboard', 'undo');
+    });
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyY, function() {
+        editor.trigger('keyboard', 'redo');
+    });
+
+    // Focus
+    editor.onDidFocusEditorText(function() {
+        notifyHost('focus', { focused: true });
+    });
+    editor.onDidBlurEditorText(function() {
+        notifyHost('focus', { focused: false });
+    });
+
+    // Notify host that editor is ready
+    notifyHost('ready', {});
+});
+
+// ====================================================================
+// Communication with WPF host
+// ====================================================================
+
+function notifyHost(type, data) {
+    try {
+        if (window.chrome && window.chrome.webview) {
+            window.chrome.webview.postMessage(JSON.stringify({ type: type, data: data }));
+        }
+    } catch(e) { /* ignore */ }
+}
+
+// ====================================================================
+// API exposed to C# via ExecuteScriptAsync
+// ====================================================================
+
+function setContent(text, language) {
+    if (!editor) return;
+    currentLanguage = language || 'plaintext';
+    originalContent = text;
+    isDirty = false;
+    
+    var model = editor.getModel();
+    if (model) {
+        monaco.editor.setModelLanguage(model, currentLanguage);
+        editor.setValue(text);
+    }
+    editor.revealLine(1);
+    editor.focus();
+}
+
+function getContent() {
+    return editor ? editor.getValue() : '';
+}
+
+function setLanguage(language) {
+    if (!editor) return;
+    currentLanguage = language;
+    var model = editor.getModel();
+    if (model) {
+        monaco.editor.setModelLanguage(model, currentLanguage);
+    }
+}
+
+function setTheme(themeName) {
+    monaco.editor.setTheme(themeName);
+}
+
+function setFontSize(size) {
+    if (editor) editor.updateOptions({ fontSize: size });
+}
+
+function setWordWrap(mode) {
+    if (editor) editor.updateOptions({ wordWrap: mode });
+}
+
+function setMinimap(enabled) {
+    if (editor) editor.updateOptions({ minimap: { enabled: enabled } });
+}
+
+function setReadOnly(readOnly) {
+    if (editor) editor.updateOptions({ readOnly: readOnly });
+}
+
+function goToLine(lineNumber) {
+    if (!editor) return;
+    editor.revealLineInCenter(lineNumber);
+    editor.setPosition({ lineNumber: lineNumber, column: 1 });
+    editor.focus();
+}
+
+function find() {
+    if (!editor) return;
+    editor.focus();
+    editor.trigger('keyboard', 'actions.find');
+}
+
+function replace() {
+    if (!editor) return;
+    editor.focus();
+    editor.trigger('keyboard', 'editor.action.startFindReplaceAction');
+}
+
+function formatDocument() {
+    if (!editor) return;
+    editor.focus();
+    editor.trigger('keyboard', 'editor.action.formatDocument');
+}
+
+function foldAll() {
+    if (!editor) return;
+    editor.focus();
+    editor.trigger('keyboard', 'editor.foldAll');
+}
+
+function unfoldAll() {
+    if (!editor) return;
+    editor.focus();
+    editor.trigger('keyboard', 'editor.unfoldAll');
+}
+
+function isDirtyState() {
+    return isDirty;
+}
+
+function markAsSaved() {
+    originalContent = editor ? editor.getValue() : '';
+    isDirty = false;
+}
+
+function setEditorOptions(optionsJson) {
+    if (editor) {
+        try {
+            var options = JSON.parse(optionsJson);
+            editor.updateOptions(options);
+        } catch(e) {}
+    }
+}
+
+function executeCommand(commandId) {
+    if (!editor) return;
+    editor.focus();
+    // Try as a registered action first (editor.action.*)
+    var action = editor.getAction(commandId);
+    if (action) {
+        action.run();
+    } else {
+        // Fallback to trigger for basic commands (undo, redo, etc.)
+        editor.trigger('toolbar', commandId);
+    }
+}
+
+// Handle resize
+window.addEventListener('resize', function() {
+    if (editor) editor.layout();
+});
+
+// Prevent default browser context menu
+document.addEventListener('contextmenu', function(e) {
+    // Let Monaco handle its own context menu
+});
+</script>
+</body>
+</html>

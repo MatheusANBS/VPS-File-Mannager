@@ -1,0 +1,26 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2
+      
+    - name: Restore NuGet packages
+      run: dotnet restore VPSFileManager/VPSFileManager.csproj
+
+    - name: Build Solution
+      run: msbuild VPSFileManager/VPSFileManager.csproj /p:Configuration=Release /p:RestorePackages=false

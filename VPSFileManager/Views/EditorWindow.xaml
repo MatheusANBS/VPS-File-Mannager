@@ -1,0 +1,268 @@
+<ui:FluentWindow x:Class="VPSFileManager.Views.EditorWindow"
+                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                xmlns:controls="clr-namespace:VPSFileManager.Controls"
+                Title="{Binding Title}"
+                Width="1100"
+                Height="750"
+                WindowStartupLocation="CenterScreen"
+                ExtendsContentIntoTitleBar="True"
+                WindowBackdropType="Mica">
+    
+    <Window.InputBindings>
+        <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SaveCommand}"/>
+        <KeyBinding Key="W" Modifiers="Ctrl" Command="{Binding CloseCommand}"/>
+    </Window.InputBindings>
+
+    <Window.Resources>
+        <!-- Estilo base para botões da toolbar (VS Code style) -->
+        <Style x:Key="ToolbarButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#cccccc"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="Margin" Value="1,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="MinWidth" Value="28"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                                CornerRadius="4" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#3e3e42"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#505054"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Toggle button ativo -->
+        <Style x:Key="ToolbarToggle" TargetType="ToggleButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#cccccc"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Setter Property="Margin" Value="1,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="MinWidth" Value="28"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                                CornerRadius="4" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#3e3e42"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#37373d"/>
+                                <Setter Property="Foreground" Value="#ffffff"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Separador vertical da toolbar -->
+        <Style x:Key="ToolbarSeparator" TargetType="Border">
+            <Setter Property="Width" Value="1"/>
+            <Setter Property="Background" Value="#3c3c3c"/>
+            <Setter Property="Margin" Value="6,4"/>
+        </Style>
+    </Window.Resources>
+    
+    <Grid Background="#1e1e1e">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- TitleBar com botões minimizar/maximizar/fechar -->
+        <ui:TitleBar Title="{Binding Title}" Grid.Row="0" Background="#252526" Foreground="#CCCCCC"/>
+
+        <!-- Header / Title Bar -->
+        <Border Grid.Row="1" Background="#252526" Padding="16,10" BorderBrush="#3c3c3c" BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <ui:SymbolIcon Symbol="DocumentEdit24" FontSize="18" Foreground="#569CD6"/>
+                    <TextBlock Text="{Binding FileName}" Foreground="#cccccc" FontWeight="SemiBold" FontSize="13" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding DirtyIndicator}" Foreground="#e8e8e8" FontSize="13" Margin="2,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding FilePath}" Foreground="#808080" FontSize="11" Margin="12,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <ui:Button Command="{Binding SaveCommand}" Icon="{ui:SymbolIcon Save24}" Content="Save" Appearance="Primary" Margin="0,0,8,0" Padding="14,6"/>
+                    <ui:Button Command="{Binding CloseCommand}" Icon="{ui:SymbolIcon Dismiss24}" Content="Close" Appearance="Transparent" Padding="10,6"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ═══════════ TOOLBAR ═══════════ -->
+        <Border Grid.Row="2" Background="#2d2d2d" Padding="8,3" BorderBrush="#3c3c3c" BorderThickness="0,0,0,1">
+            <DockPanel>
+                <!-- Lado esquerdo: ferramentas de edição -->
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
+                    
+                    <!-- Undo / Redo -->
+                    <Button x:Name="BtnUndo" Style="{StaticResource ToolbarButton}" ToolTip="Undo  (Ctrl+Z)" Click="OnUndo">
+                        <ui:SymbolIcon Symbol="ArrowUndo24" FontSize="14" Foreground="#cccccc"/>
+                    </Button>
+                    <Button x:Name="BtnRedo" Style="{StaticResource ToolbarButton}" ToolTip="Redo  (Ctrl+Y)" Click="OnRedo">
+                        <ui:SymbolIcon Symbol="ArrowRedo24" FontSize="14" Foreground="#cccccc"/>
+                    </Button>
+                    
+                    <Border Style="{StaticResource ToolbarSeparator}"/>
+
+                    <!-- Find / Replace -->
+                    <Button x:Name="BtnFind" Style="{StaticResource ToolbarButton}" ToolTip="Find  (Ctrl+F)" Click="OnFind">
+                        <ui:SymbolIcon Symbol="Search24" FontSize="14" Foreground="#cccccc"/>
+                    </Button>
+                    <Button x:Name="BtnReplace" Style="{StaticResource ToolbarButton}" ToolTip="Find &amp; Replace  (Ctrl+H)" Click="OnReplace">
+                        <ui:SymbolIcon Symbol="TextChangeCase24" FontSize="14" Foreground="#cccccc"/>
+                    </Button>
+                    
+                    <Border Style="{StaticResource ToolbarSeparator}"/>
+
+                    <!-- Format / Fold -->
+                    <Button x:Name="BtnFormat" Style="{StaticResource ToolbarButton}" ToolTip="Format Document  (Shift+Alt+F)" Click="OnFormat">
+                        <ui:SymbolIcon Symbol="TextAlignLeft24" FontSize="14" Foreground="#cccccc"/>
+                    </Button>
+                    <Button x:Name="BtnFoldAll" Style="{StaticResource ToolbarButton}" ToolTip="Fold All  (Ctrl+K, Ctrl+0)" Click="OnFoldAll">
+                        <ui:SymbolIcon Symbol="TextCollapse24" FontSize="14" Foreground="#cccccc"/>
+                    </Button>
+                    <Button x:Name="BtnUnfoldAll" Style="{StaticResource ToolbarButton}" ToolTip="Unfold All  (Ctrl+K, Ctrl+J)" Click="OnUnfoldAll">
+                        <ui:SymbolIcon Symbol="TextExpand24" FontSize="14" Foreground="#cccccc"/>
+                    </Button>
+
+                    <Border Style="{StaticResource ToolbarSeparator}"/>
+
+                    <!-- Go To Line -->
+                    <Button x:Name="BtnGoToLine" Style="{StaticResource ToolbarButton}" ToolTip="Go to Line  (Ctrl+G)" Click="OnGoToLine">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="ArrowStepIn24" FontSize="14" Foreground="#cccccc"/>
+                            <TextBlock Text="Go to Line" Foreground="#cccccc" Margin="4,0,2,0" FontSize="11" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Border Style="{StaticResource ToolbarSeparator}"/>
+
+                    <!-- Command Palette -->
+                    <Button x:Name="BtnCommandPalette" Style="{StaticResource ToolbarButton}" ToolTip="Command Palette  (F1)" Click="OnCommandPalette">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="AppsList24" FontSize="14" Foreground="#cccccc"/>
+                            <TextBlock Text="Commands" Foreground="#cccccc" Margin="4,0,2,0" FontSize="11" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                
+                <!-- Lado direito: toggles visuais -->
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
+
+                    <!-- Word Wrap Toggle -->
+                    <ToggleButton x:Name="BtnWordWrap" Style="{StaticResource ToolbarToggle}" ToolTip="Toggle Word Wrap  (Alt+Z)" Checked="OnWordWrapChanged" Unchecked="OnWordWrapChanged">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="TextWrap24" FontSize="14"/>
+                            <TextBlock Text="Wrap" Margin="4,0,2,0" FontSize="11" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ToggleButton>
+
+                    <!-- Minimap Toggle -->
+                    <ToggleButton x:Name="BtnMinimap" Style="{StaticResource ToolbarToggle}" IsChecked="True" ToolTip="Toggle Minimap" Checked="OnMinimapChanged" Unchecked="OnMinimapChanged">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="Map24" FontSize="14"/>
+                            <TextBlock Text="Minimap" Margin="4,0,2,0" FontSize="11" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </ToggleButton>
+
+                    <Border Style="{StaticResource ToolbarSeparator}"/>
+
+                    <!-- Font Size -->
+                    <Button x:Name="BtnFontMinus" Style="{StaticResource ToolbarButton}" ToolTip="Decrease Font Size  (Ctrl+-)" Click="OnFontDecrease">
+                        <TextBlock Text="A-" FontSize="12" FontWeight="Bold" Foreground="#cccccc"/>
+                    </Button>
+                    <TextBlock x:Name="TxtFontSize" Text="14" Foreground="#aaaaaa" FontSize="11" VerticalAlignment="Center" Margin="2,0"/>
+                    <Button x:Name="BtnFontPlus" Style="{StaticResource ToolbarButton}" ToolTip="Increase Font Size  (Ctrl++)" Click="OnFontIncrease">
+                        <TextBlock Text="A+" FontSize="12" FontWeight="Bold" Foreground="#cccccc"/>
+                    </Button>
+
+                    <Border Style="{StaticResource ToolbarSeparator}"/>
+
+                    <!-- Shortcuts Help -->
+                    <Button x:Name="BtnShortcuts" Style="{StaticResource ToolbarButton}" ToolTip="Keyboard Shortcuts" Click="OnShowShortcuts">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:SymbolIcon Symbol="Keyboard24" FontSize="14" Foreground="#cccccc"/>
+                            <TextBlock Text="Shortcuts" Foreground="#cccccc" Margin="4,0,2,0" FontSize="11" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Monaco Editor -->
+        <controls:MonacoEditorControl Grid.Row="3" x:Name="MonacoEditor"/>
+
+        <!-- Status Bar (VS Code style) -->
+        <Border Grid.Row="4" Background="#007acc" Padding="8,3" BorderThickness="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Cursor position -->
+                <TextBlock Grid.Column="0" Text="{Binding CursorPosition}" Foreground="White" FontSize="12" Margin="4,0,16,0" VerticalAlignment="Center" FontFamily="Segoe UI"/>
+                
+                <!-- Selection info -->
+                <TextBlock Grid.Column="1" Text="{Binding SelectionInfo}" Foreground="White" FontSize="12" Margin="0,0,16,0" VerticalAlignment="Center" FontFamily="Segoe UI"/>
+                
+                <!-- Line count -->
+                <TextBlock Grid.Column="2" Text="{Binding LineCount, StringFormat='{}{0} lines'}" Foreground="White" FontSize="12" Margin="0,0,16,0" VerticalAlignment="Center" FontFamily="Segoe UI"/>
+                
+                <!-- Status message (centered) -->
+                <TextBlock Grid.Column="3" Text="{Binding StatusMessage}" Foreground="White" FontSize="12" VerticalAlignment="Center" FontFamily="Segoe UI"/>
+                
+                <!-- Language -->
+                <TextBlock Grid.Column="4" Text="{Binding LanguageDisplay}" Foreground="White" FontSize="12" Margin="16,0,0,0" VerticalAlignment="Center" FontFamily="Segoe UI"/>
+                
+                <!-- Encoding -->
+                <TextBlock Grid.Column="5" Text="{Binding Encoding}" Foreground="White" FontSize="12" Margin="16,0,0,0" VerticalAlignment="Center" FontFamily="Segoe UI"/>
+                
+                <!-- File size -->
+                <TextBlock Grid.Column="6" Text="{Binding FileSize}" Foreground="White" FontSize="12" Margin="16,0,4,0" VerticalAlignment="Center" FontFamily="Segoe UI"/>
+            </Grid>
+        </Border>
+    </Grid>
+</ui:FluentWindow>

@@ -1,0 +1,24 @@
+# Build outputs
+**/bin/
+**/obj/
+
+# Installer output
+**/Installer/*.exe
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# NuGet
+packages/
+*.nupkg
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Logs and backups
+*.log
+*.bak
+*~

@@ -1,0 +1,476 @@
+<ui:FluentWindow x:Class="VPSFileManager.Views.ShortcutsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        Title="Keyboard Shortcuts"
+        Height="620" Width="520"
+        MinHeight="500" MinWidth="420"
+        WindowStartupLocation="CenterOwner"
+        ExtendsContentIntoTitleBar="True"
+        WindowBackdropType="Mica"
+        ResizeMode="CanResize">
+
+    <Window.Resources>
+        <!-- Estilo para cabeçalho de seção -->
+        <Style x:Key="SectionHeader" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#569cd6"/>
+            <Setter Property="Margin" Value="0,14,0,6"/>
+        </Style>
+
+        <!-- Estilo para tecla de atalho (badge) -->
+        <Style x:Key="KeyBadge" TargetType="Border">
+            <Setter Property="Background" Value="#2d2d30"/>
+            <Setter Property="BorderBrush" Value="#3e3e42"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="Margin" Value="0,0,2,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Estilo para texto da tecla -->
+        <Style x:Key="KeyText" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Cascadia Code, Consolas, monospace"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="#cccccc"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Estilo para descrição do atalho -->
+        <Style x:Key="ShortcutDesc" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#aaaaaa"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- Linha de atalho -->
+        <Style x:Key="ShortcutRow" TargetType="Grid">
+            <Setter Property="Margin" Value="0,2"/>
+            <Setter Property="Height" Value="28"/>
+        </Style>
+
+        <!-- Separador entre seções -->
+        <Style x:Key="SectionSeparator" TargetType="Border">
+            <Setter Property="BorderBrush" Value="#2d2d30"/>
+            <Setter Property="BorderThickness" Value="0,1,0,0"/>
+            <Setter Property="Margin" Value="0,6,0,0"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Cabeçalho -->
+        <Border Grid.Row="0" Padding="20,40,20,12" Background="Transparent">
+            <StackPanel>
+                <TextBlock Text="⌨️  Keyboard Shortcuts" FontSize="18" FontWeight="Bold" Foreground="#e0e0e0"/>
+                <TextBlock Text="Monaco Editor — All available shortcuts" FontSize="12" Foreground="#888888" Margin="0,4,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Conteúdo scrollável -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="20,0">
+            <StackPanel x:Name="ShortcutsPanel">
+
+                <!-- FILE -->
+                <TextBlock Text="📁  File" Style="{StaticResource SectionHeader}"/>
+                <!-- Ctrl+S -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="180"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="S" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Save file" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+W -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="180"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="W" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Close editor" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+
+                <Border Style="{StaticResource SectionSeparator}"/>
+
+                <!-- EDITING -->
+                <TextBlock Text="✏️  Editing" Style="{StaticResource SectionHeader}"/>
+                <!-- Ctrl+Z -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Z" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Undo" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+Y -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Y" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Redo" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+X -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="X" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Cut line" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+C -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="C" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Copy" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+V -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="V" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Paste" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+D -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="D" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Duplicate selection" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+Shift+K -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Shift" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="K" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Delete line" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Alt+Up/Down -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Alt" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="↑ / ↓" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Move line up / down" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+/ -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="/" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Toggle line comment" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Shift+Alt+A -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Shift" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Alt" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="A" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Toggle block comment" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Tab / Shift+Tab -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Tab" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" / " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Shift" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text="+" Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Tab" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Indent / Outdent" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+
+                <Border Style="{StaticResource SectionSeparator}"/>
+
+                <!-- SEARCH -->
+                <TextBlock Text="🔍  Search" Style="{StaticResource SectionHeader}"/>
+                <!-- Ctrl+F -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="F" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Find" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+H -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="H" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Find &amp; Replace" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- F3 -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="F3" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" / " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Shift" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text="+" Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="F3" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Next / Previous match" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+Shift+L -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Shift" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="L" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Select all occurrences" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+
+                <Border Style="{StaticResource SectionSeparator}"/>
+
+                <!-- NAVIGATION -->
+                <TextBlock Text="📍  Navigation" Style="{StaticResource SectionHeader}"/>
+                <!-- Ctrl+G -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="G" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Go to line" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+Home/End -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Home / End" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Go to start / end of file" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+Shift+\ -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Shift" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="\" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Jump to matching bracket" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+
+                <Border Style="{StaticResource SectionSeparator}"/>
+
+                <!-- MULTI-CURSOR -->
+                <TextBlock Text="✨  Multi-Cursor" Style="{StaticResource SectionHeader}"/>
+                <!-- Alt+Click -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Alt" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Click" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Add cursor" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+Alt+Up/Down -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Alt" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="↑ / ↓" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Add cursor above / below" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+U -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="U" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Undo last cursor" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+
+                <Border Style="{StaticResource SectionSeparator}"/>
+
+                <!-- CODE -->
+                <TextBlock Text="📦  Code" Style="{StaticResource SectionHeader}"/>
+                <!-- Shift+Alt+F -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Shift" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Alt" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="F" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Format document" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+K, Ctrl+0 -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl+K" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" , " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl+0" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Fold all" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+K, Ctrl+J -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl+K" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" , " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl+J" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Unfold all" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- F1 -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="F1" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Command Palette" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+
+                <Border Style="{StaticResource SectionSeparator}"/>
+
+                <!-- SELECTION -->
+                <TextBlock Text="🖱️  Selection" Style="{StaticResource SectionHeader}"/>
+                <!-- Ctrl+A -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="A" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Select all" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl+L -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="L" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Select line" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Shift+Alt+Arrow -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Shift" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Alt" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="→ / ←" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Expand / Shrink selection" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+
+                <Border Style="{StaticResource SectionSeparator}"/>
+
+                <!-- VIEW -->
+                <TextBlock Text="👁️  View" Style="{StaticResource SectionHeader}"/>
+                <!-- Alt+Z -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Alt" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Z" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Toggle word wrap" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+                <!-- Ctrl++/- -->
+                <Grid Style="{StaticResource ShortcutRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="180"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal">
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="Ctrl" Style="{StaticResource KeyText}"/></Border>
+                        <TextBlock Text=" + " Foreground="#666" VerticalAlignment="Center" FontSize="11"/>
+                        <Border Style="{StaticResource KeyBadge}"><TextBlock Text="+ / -" Style="{StaticResource KeyText}"/></Border>
+                    </StackPanel>
+                    <TextBlock Grid.Column="1" Text="Zoom in / out (font size)" Style="{StaticResource ShortcutDesc}"/>
+                </Grid>
+
+                <!-- Bottom padding -->
+                <Border Height="20"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Rodapé -->
+        <Border Grid.Row="2" Padding="20,10" Background="#1e1e1e" BorderBrush="#2d2d30" BorderThickness="0,1,0,0">
+            <DockPanel>
+                <TextBlock Text="Tip: Press F1 in the editor to open Command Palette" 
+                           FontSize="11" Foreground="#666" VerticalAlignment="Center"/>
+                <ui:Button Content="Close" Appearance="Secondary" Padding="20,6" 
+                           HorizontalAlignment="Right" Click="OnClose" MinWidth="80"/>
+            </DockPanel>
+        </Border>
+    </Grid>
+</ui:FluentWindow>

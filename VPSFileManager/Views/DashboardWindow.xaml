@@ -1,0 +1,568 @@
+<ui:FluentWindow x:Class="VPSFileManager.Views.DashboardWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:local="clr-namespace:VPSFileManager.Views"
+        xmlns:controls="clr-namespace:VPSFileManager.Controls"
+        Title="VPS Dashboard" 
+        Width="1100" Height="720"
+        MinWidth="900" MinHeight="600"
+        WindowStartupLocation="CenterOwner"
+        Background="#0A0A0A"
+        Foreground="#E0E0E0">
+
+    <ui:FluentWindow.Resources>
+        <Style x:Key="CardBorder" TargetType="Border">
+            <Setter Property="Background" Value="#111111"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="BorderBrush" Value="#1A1A1A"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style x:Key="CardTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#E0E0E0"/>
+        </Style>
+
+        <Style x:Key="BigPercent" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="32"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+        </Style>
+
+        <Style x:Key="SubLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="#666666"/>
+        </Style>
+
+        <Style x:Key="InfoLabel" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="#888888"/>
+        </Style>
+
+        <Style x:Key="InfoValue" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#CCCCCC"/>
+        </Style>
+    </ui:FluentWindow.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ═══ Title Bar ═══ -->
+        <ui:TitleBar Title="VPS Dashboard" ShowMinimize="True" ShowMaximize="True" ShowClose="True"/>
+
+        <!-- ═══ Loading overlay ═══ -->
+        <Grid Grid.Row="1" Panel.ZIndex="10"
+              Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border Background="#DD0A0A0A"/>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ui:ProgressRing IsIndeterminate="True" Width="48" Height="48"/>
+                <TextBlock Text="Collecting system metrics..." Foreground="#777777" 
+                           FontSize="12" HorizontalAlignment="Center" Margin="0,16,0,0"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- ═══ Error overlay ═══ -->
+        <Border Grid.Row="1" Panel.ZIndex="9" Background="#DD0A0A0A"
+                Visibility="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ui:SymbolIcon Symbol="ErrorCircle24" FontSize="40" Foreground="#EF4444"/>
+                <TextBlock Text="Failed to collect metrics" FontSize="14" Foreground="#EF4444" 
+                           HorizontalAlignment="Center" Margin="0,12,0,4"/>
+                <TextBlock Text="{Binding ErrorMessage}" FontSize="11" Foreground="#666666" 
+                           HorizontalAlignment="Center" TextWrapping="Wrap" MaxWidth="400"/>
+                <ui:Button Content="Retry" Command="{Binding RefreshMetricsCommand}" 
+                           Appearance="Primary" Margin="0,16,0,0" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ═══ Dashboard Content ═══ -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="16,12">
+            <StackPanel>
+
+                <!-- ═══ Header with server name + refresh ═══ -->
+                <Grid Margin="0,0,0,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding Hostname}" FontSize="18" FontWeight="Bold" Foreground="#FFFFFF"/>
+                        <Border CornerRadius="4" Background="#10B981" Padding="6,2" Margin="12,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="●" FontSize="8" Foreground="#FFFFFF" VerticalAlignment="Center"/>
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Border CornerRadius="6" Background="#151515" Padding="10,5" Margin="0,0,8,0"
+                                Visibility="{Binding IsRefreshing, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:ProgressRing IsIndeterminate="True" Width="12" Height="12"/>
+                                <TextBlock Text="Refreshing" FontSize="10" Foreground="#555555" 
+                                           Margin="6,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+
+                        <ui:Button Icon="{ui:SymbolIcon ArrowSync24}" 
+                                   Command="{Binding RefreshMetricsCommand}"
+                                   Appearance="Transparent" Padding="6" ToolTip="Refresh Status"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- ════════════════════════════════════════════════════════════════ -->
+                <!-- ROW 1: CPU Usage | Memory Usage | Disk Usage                    -->
+                <!-- ════════════════════════════════════════════════════════════════ -->
+                <Grid Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- ═══ CPU Usage Card ═══ -->
+                    <Border Style="{StaticResource CardBorder}" Padding="16">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Header -->
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                <ui:SymbolIcon Symbol="Gauge24" FontSize="14" Foreground="#3B82F6"/>
+                                <TextBlock Text="CPU Usage" Style="{StaticResource CardTitle}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Big percentage + detail -->
+                            <Grid Grid.Row="1" Margin="0,8,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource BigPercent}">
+                                            <TextBlock.Text>
+                                                <Binding Path="CpuUsage" StringFormat="{}{0:0}%"/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock Text="{Binding CpuCores, StringFormat=' {0} CPUs'}" 
+                                                   Style="{StaticResource SubLabel}" VerticalAlignment="Bottom" Margin="4,0,0,8"/>
+                                    </StackPanel>
+                                    <TextBlock Text="{Binding LoadAverage, StringFormat='Avg {0}'}" Style="{StaticResource SubLabel}"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Sparkline chart -->
+                            <controls:SparklineControl Grid.Row="2" Height="80" Margin="0,4,0,0"
+                                                       Values="{Binding CpuHistory}"
+                                                       StrokeColor="#3B82F6"
+                                                       FillColor="#403B82F6"
+                                                       MaxValue="100"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- ═══ Memory Usage Card ═══ -->
+                    <Border Grid.Column="2" Style="{StaticResource CardBorder}" Padding="16">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Header -->
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                <ui:SymbolIcon Symbol="Memory16" FontSize="14" Foreground="#10B981"/>
+                                <TextBlock Text="Memory Usage" Style="{StaticResource CardTitle}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Big percentage + detail -->
+                            <Grid Grid.Row="1" Margin="0,8,0,8">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Style="{StaticResource BigPercent}">
+                                            <TextBlock.Text>
+                                                <Binding Path="MemUsage" StringFormat="{}{0:0}%"/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <TextBlock Style="{StaticResource SubLabel}" VerticalAlignment="Bottom" Margin="4,0,0,8">
+                                            <Run Text="{Binding MemUsedDisplay, Mode=OneWay}"/>
+                                            <Run Text=" / "/>
+                                            <Run Text="{Binding MemTotalDisplay, Mode=OneWay}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <TextBlock Style="{StaticResource SubLabel}">
+                                        <Run Text="Free: "/>
+                                        <Run Text="{Binding MemFreeDisplay, Mode=OneWay}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Sparkline chart -->
+                            <controls:SparklineControl Grid.Row="2" Height="80" Margin="0,4,0,0"
+                                                       Values="{Binding MemHistory}"
+                                                       StrokeColor="#10B981"
+                                                       FillColor="#4010B981"
+                                                       MaxValue="100"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- ═══ Disk Usage Card (Donut style) ═══ -->
+                    <Border Grid.Column="4" Style="{StaticResource CardBorder}" Padding="16">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Header -->
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <ui:SymbolIcon Symbol="HardDrive20" FontSize="14" Foreground="#F59E0B"/>
+                                <TextBlock Text="Disk Usage" Style="{StaticResource CardTitle}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Disk list or primary disk display -->
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Circle gauge (donut chart) -->
+                                <Viewbox Width="100" Height="100" Margin="0,0,16,0">
+                                    <Grid Width="100" Height="100">
+                                        <!-- Background circle -->
+                                        <Ellipse Stroke="#1F1F1F" StrokeThickness="10" Fill="Transparent" 
+                                                 Width="90" Height="90" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <!-- Value arc -->
+                                        <Ellipse Stroke="#F59E0B" StrokeThickness="10" Fill="Transparent"
+                                                 Width="90" Height="90" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                 StrokeDashArray="{Binding PrimaryDiskUsage, Converter={x:Static local:DonutStrokeConverter.Instance}}"
+                                                 StrokeDashCap="Round"
+                                                 RenderTransformOrigin="0.5,0.5">
+                                            <Ellipse.RenderTransform>
+                                                <RotateTransform Angle="-90"/>
+                                            </Ellipse.RenderTransform>
+                                        </Ellipse>
+                                        <!-- Center text -->
+                                        <TextBlock FontSize="22" FontWeight="Bold" Foreground="#F59E0B" 
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock.Text>
+                                                <Binding Path="PrimaryDiskUsage" StringFormat="{}{0:0}%"/>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                    </Grid>
+                                </Viewbox>
+
+                                <!-- Disk details -->
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Style="{StaticResource SubLabel}">
+                                        <Run Text="{Binding PrimaryDiskUsed, Mode=OneWay}"/>
+                                        <Run Text=" / "/>
+                                        <Run Text="{Binding PrimaryDiskTotal, Mode=OneWay}"/>
+                                    </TextBlock>
+                                    <TextBlock Style="{StaticResource SubLabel}" Margin="0,4,0,0">
+                                        <Run Text="Available: "/>
+                                        <Run Text="{Binding PrimaryDiskAvailable, Mode=OneWay}"/>
+                                    </TextBlock>
+                                    <TextBlock Text="{Binding PrimaryDiskMount}" Style="{StaticResource SubLabel}" Margin="0,4,0,0" Foreground="#555555"/>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- ════════════════════════════════════════════════════════════════ -->
+                <!-- ROW 2: Network Interfaces | Uptime | System Information          -->
+                <!-- ════════════════════════════════════════════════════════════════ -->
+                <Grid Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- ═══ Network Interfaces Card ═══ -->
+                    <Border Style="{StaticResource CardBorder}" Padding="16">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <ui:SymbolIcon Symbol="Wifi120" FontSize="14" Foreground="#06B6D4"/>
+                                <TextBlock Text="Network Interfaces" Style="{StaticResource CardTitle}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <ItemsControl ItemsSource="{Binding NetworkInterfaces}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,0,0,10">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Interface icon + name -->
+                                            <StackPanel Orientation="Horizontal">
+                                                <Border Width="20" Height="20" CornerRadius="4" Background="#1A1A1A" Margin="0,0,8,0">
+                                                    <ui:SymbolIcon Symbol="Globe16" FontSize="10" Foreground="#06B6D4"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                </Border>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Name}" FontSize="12" Foreground="#CCCCCC"/>
+                                                    <TextBlock Text="{Binding IpAddress}" FontSize="10" Foreground="#555555"/>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- UP badge -->
+                                            <Border Grid.Column="2" CornerRadius="4" Background="#1A3D32" Padding="8,3">
+                                                <TextBlock Text="UP" FontSize="10" FontWeight="SemiBold" Foreground="#10B981"/>
+                                            </Border>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <!-- Empty state -->
+                            <TextBlock Text="No network interfaces" Style="{StaticResource SubLabel}" 
+                                       HorizontalAlignment="Center" Margin="0,8,0,0"
+                                       Visibility="{Binding NetworkInterfaces.Count, Converter={StaticResource ZeroToVisibilityConverter}}"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ═══ Uptime Card ═══ -->
+                    <Border Grid.Column="2" Style="{StaticResource CardBorder}" Padding="16">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                <ui:SymbolIcon Symbol="Timer24" FontSize="14" Foreground="#8B5CF6"/>
+                                <TextBlock Text="Uptime" Style="{StaticResource CardTitle}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <!-- Pulse icon animation placeholder -->
+                                <Border Width="60" Height="60" CornerRadius="30" Background="#1A1A1A" Margin="0,0,0,12">
+                                    <ui:SymbolIcon Symbol="HeartPulse24" FontSize="28" Foreground="#8B5CF6"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text="{Binding UptimeDisplay}" FontSize="24" FontWeight="Bold" 
+                                           Foreground="#8B5CF6" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Total Uptime" Style="{StaticResource SubLabel}" 
+                                           HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- ═══ System Information Card ═══ -->
+                    <Border Grid.Column="4" Style="{StaticResource CardBorder}" Padding="16">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <ui:SymbolIcon Symbol="Info24" FontSize="14" Foreground="#F472B6"/>
+                                <TextBlock Text="System Information" Style="{StaticResource CardTitle}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Hostname -->
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <ui:SymbolIcon Symbol="Desktop16" FontSize="12" Foreground="#555555" Margin="0,0,8,0" VerticalAlignment="Top"/>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Hostname" Style="{StaticResource InfoLabel}"/>
+                                    <TextBlock Text="{Binding Hostname}" Style="{StaticResource InfoValue}" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Operating System -->
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <ui:SymbolIcon Symbol="WindowApps20" FontSize="12" Foreground="#555555" Margin="0,0,8,0" VerticalAlignment="Top"/>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Operating System" Style="{StaticResource InfoLabel}"/>
+                                    <TextBlock Text="{Binding OsName}" Style="{StaticResource InfoValue}" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Kernel -->
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <ui:SymbolIcon Symbol="Code20" FontSize="12" Foreground="#555555" Margin="0,0,8,0" VerticalAlignment="Top"/>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Kernel" Style="{StaticResource InfoLabel}"/>
+                                    <TextBlock Text="{Binding KernelVersion}" Style="{StaticResource InfoValue}" TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- ════════════════════════════════════════════════════════════════ -->
+                <!-- ROW 3: Top Processes (side by side CPU / MEM)                     -->
+                <!-- ════════════════════════════════════════════════════════════════ -->
+                <Grid Margin="0,0,0,12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left: By CPU -->
+                    <Border Style="{StaticResource CardBorder}" Padding="16">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <ui:SymbolIcon Symbol="TopSpeed24" FontSize="14" Foreground="#3B82F6"/>
+                                <TextBlock Text="Top by CPU" Style="{StaticResource CardTitle}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Process header -->
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="PID" FontSize="10" FontWeight="Bold" Foreground="#444444"/>
+                                <TextBlock Grid.Column="1" Text="USER" FontSize="10" FontWeight="Bold" Foreground="#444444"/>
+                                <TextBlock Grid.Column="2" Text="CPU%" FontSize="10" FontWeight="Bold" Foreground="#444444"/>
+                                <TextBlock Grid.Column="3" Text="COMMAND" FontSize="10" FontWeight="Bold" Foreground="#444444"/>
+                            </Grid>
+
+                            <ItemsControl ItemsSource="{Binding Processes}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="0,3" BorderBrush="#1A1A1A" BorderThickness="0,0,0,1">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="50"/>
+                                                    <ColumnDefinition Width="70"/>
+                                                    <ColumnDefinition Width="50"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Pid}" FontSize="10" Foreground="#666666" FontFamily="Consolas"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding User}" FontSize="10" Foreground="#888888" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Grid.Column="2" FontSize="10" FontFamily="Consolas">
+                                                    <TextBlock.Text>
+                                                        <Binding Path="CpuPercent" StringFormat="{}{0:0.#}"/>
+                                                    </TextBlock.Text>
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Foreground" Value="#3B82F6"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding CpuPercent, Converter={x:Static local:ThresholdConverter.Instance}, ConverterParameter=50}" Value="True">
+                                                                    <Setter Property="Foreground" Value="#F59E0B"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding CpuPercent, Converter={x:Static local:ThresholdConverter.Instance}, ConverterParameter=80}" Value="True">
+                                                                    <Setter Property="Foreground" Value="#EF4444"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBlock Grid.Column="3" Text="{Binding Command}" FontSize="10" Foreground="#AAAAAA" 
+                                                           FontFamily="Consolas" TextTrimming="CharacterEllipsis"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Right: By Memory -->
+                    <Border Grid.Column="2" Style="{StaticResource CardBorder}" Padding="16">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <ui:SymbolIcon Symbol="AppRecent24" FontSize="14" Foreground="#10B981"/>
+                                <TextBlock Text="Top by Memory" Style="{StaticResource CardTitle}" Margin="8,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+
+                            <!-- Process header -->
+                            <Grid Margin="0,0,0,6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="PID" FontSize="10" FontWeight="Bold" Foreground="#444444"/>
+                                <TextBlock Grid.Column="1" Text="USER" FontSize="10" FontWeight="Bold" Foreground="#444444"/>
+                                <TextBlock Grid.Column="2" Text="MEM%" FontSize="10" FontWeight="Bold" Foreground="#444444"/>
+                                <TextBlock Grid.Column="3" Text="COMMAND" FontSize="10" FontWeight="Bold" Foreground="#444444"/>
+                            </Grid>
+
+                            <ItemsControl ItemsSource="{Binding ProcessesByMem}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="0,3" BorderBrush="#1A1A1A" BorderThickness="0,0,0,1">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="50"/>
+                                                    <ColumnDefinition Width="70"/>
+                                                    <ColumnDefinition Width="50"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding Pid}" FontSize="10" Foreground="#666666" FontFamily="Consolas"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding User}" FontSize="10" Foreground="#888888" TextTrimming="CharacterEllipsis"/>
+                                                <TextBlock Grid.Column="2" FontSize="10" FontFamily="Consolas">
+                                                    <TextBlock.Text>
+                                                        <Binding Path="MemPercent" StringFormat="{}{0:0.#}"/>
+                                                    </TextBlock.Text>
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Foreground" Value="#10B981"/>
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding MemPercent, Converter={x:Static local:ThresholdConverter.Instance}, ConverterParameter=50}" Value="True">
+                                                                    <Setter Property="Foreground" Value="#F59E0B"/>
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding MemPercent, Converter={x:Static local:ThresholdConverter.Instance}, ConverterParameter=80}" Value="True">
+                                                                    <Setter Property="Foreground" Value="#EF4444"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                                <TextBlock Grid.Column="3" Text="{Binding Command}" FontSize="10" Foreground="#AAAAAA" 
+                                                           FontFamily="Consolas" TextTrimming="CharacterEllipsis"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- Footer -->
+                <TextBlock FontSize="10" Foreground="#333333" HorizontalAlignment="Center" Margin="0,0,0,8">
+                    <Run Text="Auto-refresh every"/>
+                    <Run Text="{Binding RefreshIntervalSeconds, Mode=OneWay}"/>
+                    <Run Text="s  •  Last updated:"/>
+                    <Run Text="{Binding LastUpdated, Mode=OneWay}"/>
+                </TextBlock>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</ui:FluentWindow>
