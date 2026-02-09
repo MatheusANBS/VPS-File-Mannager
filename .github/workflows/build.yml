@@ -20,8 +20,7 @@ jobs:
       uses: NuGet/setup-nuget@v2
       
     - name: Restore NuGet packages
-      run: nuget restore VPSFileManager/VPSFileManager.sln
-      continue-on-error: true # Might fail if sln not found, trying csproj next if needed
+      run: dotnet restore VPSFileManager/VPSFileManager.csproj
 
     - name: Build Solution
-      run: msbuild VPSFileManager/VPSFileManager.csproj /p:Configuration=Release
+      run: msbuild VPSFileManager/VPSFileManager.csproj /p:Configuration=Release /p:RestorePackages=false
