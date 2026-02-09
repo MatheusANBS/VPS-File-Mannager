@@ -62,32 +62,13 @@ cd VPS-File-Mannager
 
 ## <img src="assets/icons/lightbulb.svg" width="24" height="24" /> Por que VPS File Manager?
 
-<table>
-<tr>
-<td width="50%">
-
-### <img src="assets/icons/cross.svg" width="16" height="16" /> Antes
-
-<img src="assets/icons/folder.svg" width="16" height="16" /> **WinSCP** → Upload/Download<br/>
-<img src="assets/icons/monitor.svg" width="16" height="16" /> **PuTTY** → Terminal<br/>
-<img src="assets/icons/note.svg" width="16" height="16" /> **Notepad++** → Editar configs<br/>
-<img src="assets/icons/refresh.svg" width="16" height="16" /> **Alt+Tab** → Trocar entre 3 apps<br/>
-<img src="assets/icons/clock.svg" width="16" height="16" /> Tempo perdido trocando contexto
-
-</td>
-<td width="50%">
-
-### <img src="assets/icons/check.svg" width="16" height="16" /> Agora
-
-<img src="assets/icons/lightning.svg" width="16" height="16" /> **1 aplicativo integrado**<br/>
-<img src="assets/icons/target.svg" width="16" height="16" /> **Workflow contínuo**<br/>
-<img src="assets/icons/wind.svg" width="16" height="16" /> **3x mais produtivo**<br/>
-<img src="assets/icons/palette.svg" width="16" height="16" /> **Interface moderna**<br/>
-<img src="assets/icons/lock.svg" width="16" height="16" /> **Mais seguro (DPAPI)**
-
-</td>
-</tr>
-</table>
+| <img src="assets/icons/cross.svg" width="16" height="16" /> **Antes** | <img src="assets/icons/check.svg" width="16" height="16" /> **Agora** |
+|---|---|
+| <img src="assets/icons/folder.svg" width="16" height="16" /> **WinSCP** → Upload/Download | <img src="assets/icons/lightning.svg" width="16" height="16" /> **1 aplicativo integrado** |
+| <img src="assets/icons/monitor.svg" width="16" height="16" /> **PuTTY** → Terminal | <img src="assets/icons/target.svg" width="16" height="16" /> **Workflow contínuo** |
+| <img src="assets/icons/note.svg" width="16" height="16" /> **Notepad++** → Editar configs | <img src="assets/icons/wind.svg" width="16" height="16" /> **3x mais produtivo** |
+| <img src="assets/icons/refresh.svg" width="16" height="16" /> **Alt+Tab** → Trocar entre 3 apps | <img src="assets/icons/palette.svg" width="16" height="16" /> **Interface moderna** |
+| <img src="assets/icons/clock.svg" width="16" height="16" /> Tempo perdido trocando contexto | <img src="assets/icons/lock.svg" width="16" height="16" /> **Mais seguro (DPAPI)** |
 
 ### O Problema que Resolvemos
 
