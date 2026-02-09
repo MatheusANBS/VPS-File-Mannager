@@ -60,7 +60,7 @@ cd VPS-File-Mannager
 
 ---
 
-## <img src="assets/icons/lightbulb.svg" width="24" height="24" /> Por que VPS File Manager?
+## <img src="assets/icons/lightbulb.svg" width="24" height="24" /> Por que VPS File Manager
 
 <table>
 <tr>
