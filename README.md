@@ -92,6 +92,8 @@ Gerenciar servidores VPS exige múltiplas ferramentas desconectadas. Você perde
 | <img src="assets/icons/target.svg" width="16" height="16" /> Context Switching | Alto | Alto | Muito Alto | **Zero** |
 | <img src="assets/icons/key.svg" width="16" height="16" /> Segurança de Senhas | <img src="assets/icons/warning.svg" width="16" height="16" /> | <img src="assets/icons/warning.svg" width="16" height="16" /> | <img src="assets/icons/warning.svg" width="16" height="16" /> | <img src="assets/icons/check.svg" width="16" height="16" /> **DPAPI** |
 
+> 📚 **Quer ver mais comparações?** Confira [SIMILAR_PROJECTS.md](SIMILAR_PROJECTS.md) para análise detalhada de outras alternativas no GitHub (Tabby, WindTerm, Electerm, e mais).
+
 ---
 
 ## <img src="assets/icons/target.svg" width="24" height="24" /> Para Quem é Este Projeto?
@@ -313,6 +315,9 @@ Contribuições são bem-vindas!
   </a>
   <a href="https://github.com/MatheusANBS/VPS-File-Mannager/issues">
     <img src="https://img.shields.io/badge/REPORTAR-Bugs-red?style=for-the-badge&logo=github" alt="Issues">
+  </a>
+  <a href="https://github.com/MatheusANBS/VPS-File-Mannager/blob/main/SIMILAR_PROJECTS.md">
+    <img src="https://img.shields.io/badge/VER-Alternativas-orange?style=for-the-badge&logo=github" alt="Similar Projects">
   </a>
 </p>
 
