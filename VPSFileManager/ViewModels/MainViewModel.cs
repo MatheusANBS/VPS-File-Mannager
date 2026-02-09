@@ -471,6 +471,16 @@ namespace VPSFileManager.ViewModels
         }
 
         [RelayCommand]
+        private void ShowHelp()
+        {
+            var helpWindow = new Views.HelpWindow
+            {
+                Owner = Application.Current?.MainWindow
+            };
+            helpWindow.ShowDialog();
+        }
+
+        [RelayCommand]
         private void Disconnect()
         {
             // Salvar bookmarks antes de desconectar

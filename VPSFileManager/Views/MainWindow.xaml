@@ -224,6 +224,8 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <!-- Active Connection Branding -->
@@ -312,8 +314,11 @@
                             </ui:Button.Style>
                         </ui:Button>
 
+                        <!-- Help Button -->
+                        <ui:Button Grid.Row="4" Content="Atalhos" Icon="{ui:SymbolIcon Question24}" Command="{Binding ShowHelpCommand}" Appearance="Transparent" HorizontalAlignment="Stretch" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="12,4,12,4"/>
+
                         <!-- Disconnect Button -->
-                        <ui:Button Grid.Row="4" Content="Disconnect" Icon="{ui:SymbolIcon PlugDisconnected24}" Command="{Binding DisconnectCommand}" Appearance="Transparent" HorizontalAlignment="Stretch" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="12,4,12,12"/>
+                        <ui:Button Grid.Row="6" Content="Disconnect" Icon="{ui:SymbolIcon PlugDisconnected24}" Command="{Binding DisconnectCommand}" Appearance="Transparent" HorizontalAlignment="Stretch" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="12,4,12,12"/>
                     </Grid>
                 </Border>
 

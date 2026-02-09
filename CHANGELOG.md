@@ -2,9 +2,10 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
-## [1.1.0] - 2026-02-09
+## [1.0.1] - 2026-02-09
 
 ### Adicionado
+- Botão de ajuda (Atalhos) com lista completa de hotkeys do aplicativo.
 - Editor aprimorado com detecção de comentários e suporte a arquivos de configuração (.env, dockerfile).
 - Novo tema de cores para o editor (baseado no VS Code Dark+).
 - Sistema de ícones padronizado em SVG.
