@@ -4,7 +4,7 @@ Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
 ## [1.4.0] - 2026-02-11
 
-### Auto-Update — Atualização Automática (estilo Discord)
+### Auto-Update — Atualização Automática
 - **Verificação automática** de atualizações via GitHub Releases ao iniciar o app
 - **Indicador verde** de download na sidebar quando há nova versão disponível
 - **UpdateWindow** com changelog do release, versão atual → nova, e tamanho do download
