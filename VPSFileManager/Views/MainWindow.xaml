@@ -549,6 +549,16 @@
                         <Border Grid.Row="3" Height="1" Background="#1A1A1A" Margin="16,0"/>
 
                         <StackPanel Grid.Row="4" Margin="12,8,12,12" x:Name="SidebarFooter">
+                            <ui:Button Content="{Binding UpdateVersionText, StringFormat='Update {0}'}" 
+                                       Icon="{ui:SymbolIcon ArrowDownload24}" 
+                                       Command="{Binding ShowUpdateWindowCommand}" 
+                                       Appearance="Transparent" 
+                                       HorizontalAlignment="Stretch" 
+                                       HorizontalContentAlignment="Left"
+                                       Foreground="#22C55E"
+                                       FontWeight="SemiBold"
+                                       Padding="10,6" Margin="0,0,0,2"
+                                       Visibility="{Binding IsUpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                             <ui:Button Content="Shortcuts" 
                                        Icon="{ui:SymbolIcon Keyboard24}" 
                                        Command="{Binding ShowHelpCommand}" 
@@ -571,6 +581,13 @@
                         <StackPanel Grid.Row="4" x:Name="SidebarCollapsedFooter" 
                                     Visibility="Collapsed"
                                     HorizontalAlignment="Center" Margin="0,8,0,12">
+                            <ui:Button Icon="{ui:SymbolIcon ArrowDownload24}" 
+                                       Command="{Binding ShowUpdateWindowCommand}" 
+                                       Appearance="Transparent" Padding="8" Margin="0,2"
+                                       ToolTip="{Binding UpdateVersionText, StringFormat='Update available: {0}'}" 
+                                       HorizontalAlignment="Center"
+                                       Foreground="#22C55E"
+                                       Visibility="{Binding IsUpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                             <ui:Button Icon="{ui:SymbolIcon Keyboard24}" 
                                        Command="{Binding ShowHelpCommand}" 
                                        Appearance="Transparent" Padding="8" Margin="0,2"

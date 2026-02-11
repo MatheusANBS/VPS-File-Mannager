@@ -235,6 +235,16 @@ Gerenciar servidores VPS exige múltiplas ferramentas desconectadas. Você perde
 
 ---
 
+### 🔄 Auto-Update (estilo Discord)
+- **Detecção automática** — verifica nova versão no GitHub Releases ao iniciar
+- **Indicador visual** — botão verde de download aparece na sidebar quando há update
+- **Changelog integrado** — veja o que mudou antes de atualizar
+- **Download com progresso** — barra de progresso em tempo real
+- **Instalação silenciosa** — atualiza sem interface, sem precisar de admin
+- **Restart automático** — app fecha e reabre já atualizado
+
+---
+
 ## <img src="assets/icons/keyboard.svg" width="20" height="20" /> Atalhos de Teclado
 
 <details>

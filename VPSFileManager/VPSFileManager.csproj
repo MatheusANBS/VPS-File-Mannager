@@ -10,6 +10,9 @@
     <AssemblyName>VPSFileManager</AssemblyName>
     <RootNamespace>VPSFileManager</RootNamespace>
     <ApplicationIcon>nuvem.ico</ApplicationIcon>
+    <Version>1.4.0</Version>
+    <AssemblyVersion>1.4.0.0</AssemblyVersion>
+    <FileVersion>1.4.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

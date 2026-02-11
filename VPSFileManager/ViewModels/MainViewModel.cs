@@ -185,6 +185,15 @@ namespace VPSFileManager.ViewModels
 
         private AppSettings _appSettings = AppSettings.Load();
 
+        // Auto-update
+        [ObservableProperty]
+        private bool isUpdateAvailable;
+
+        [ObservableProperty]
+        private string updateVersionText = string.Empty;
+
+        private UpdateInfo? _pendingUpdate;
+
         // Multiple selection flag
         public bool HasMultipleSelection => SelectedFilesCount > 1;
 
@@ -219,6 +228,47 @@ namespace VPSFileManager.ViewModels
             // Carregar settings e auto-connect
             AutoConnect = _appSettings.AutoConnect;
             _ = TryAutoConnectAsync();
+
+            // Verificar atualizações em background
+            _ = CheckForUpdatesAsync();
+        }
+
+        /// <summary>
+        /// Verifica se há atualizações disponíveis no GitHub
+        /// </summary>
+        private async Task CheckForUpdatesAsync()
+        {
+            try
+            {
+                await Task.Delay(2000); // Esperar 2s para não atrasar o startup
+                var update = await UpdateService.CheckForUpdateAsync();
+                if (update != null)
+                {
+                    _pendingUpdate = update;
+                    UpdateVersionText = $"v{update.TagName.TrimStart('v', 'V')}";
+
+                    Application.Current?.Dispatcher?.Invoke(() =>
+                    {
+                        IsUpdateAvailable = true;
+                    });
+                }
+            }
+            catch
+            {
+                // Silenciar erros de verificação de atualização
+            }
+        }
+
+        [RelayCommand]
+        private void ShowUpdateWindow()
+        {
+            if (_pendingUpdate == null) return;
+
+            var updateWindow = new Views.UpdateWindow(_pendingUpdate)
+            {
+                Owner = Application.Current?.MainWindow
+            };
+            updateWindow.ShowDialog();
         }
 
         partial void OnSearchQueryChanged(string value)

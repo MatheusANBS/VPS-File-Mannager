@@ -2,6 +2,17 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.4.0] - 2026-02-11
+
+### Auto-Update — Atualização Automática (estilo Discord)
+- **Verificação automática** de atualizações via GitHub Releases ao iniciar o app
+- **Indicador verde** de download na sidebar quando há nova versão disponível
+- **UpdateWindow** com changelog do release, versão atual → nova, e tamanho do download
+- **Download com progresso** — barra de progresso em tempo real durante o download
+- **Instalação silenciosa** — Inno Setup roda com `/VERYSILENT` (sem interface, sem admin)
+- **Restart automático** — app fecha e reabre automaticamente após atualização
+- Versão do app embarcada no Assembly (`Version`, `AssemblyVersion`, `FileVersion`)
+
 ## [1.3.1] - 2026-02-11
 
 ### Editor — Monaco Validação
