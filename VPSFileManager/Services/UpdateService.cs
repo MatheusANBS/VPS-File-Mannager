@@ -198,7 +198,6 @@ namespace VPSFileManager.Services
                 // /SUPPRESSMSGBOXES = sem caixas de diálogo  
                 // /NORESTART = não reiniciar o Windows
                 // /CLOSEAPPLICATIONS = fechar a aplicação se estiver rodando
-                // O [Run] do Inno Setup vai reabrir o app automaticamente após instalar
                 var startInfo = new ProcessStartInfo
                 {
                     FileName = installerPath,
@@ -208,7 +207,7 @@ namespace VPSFileManager.Services
 
                 Process.Start(startInfo);
 
-                // Fechar o app atual - o instalador vai reabrir após terminar
+                // Fechar o app atual — o Inno Setup vai reabrir após instalar (postinstall flag)
                 System.Windows.Application.Current?.Dispatcher?.Invoke(() =>
                 {
                     System.Windows.Application.Current.Shutdown();

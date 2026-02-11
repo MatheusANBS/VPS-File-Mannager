@@ -2,6 +2,11 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.4.1] - 2026-02-11
+
+### Hotfix — Auto-Update Restart
+- **Fix**: App não reabria após atualização silenciosa — removida flag `skipifsilent` do Inno Setup `[Run]`
+
 ## [1.4.0] - 2026-02-11
 
 ### Auto-Update — Atualização Automática

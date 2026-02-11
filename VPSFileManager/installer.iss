@@ -2,7 +2,7 @@
 ; Instalador SEM permissões de administrador
 
 #define MyAppName "VPS File Manager"
-#define MyAppVersion "1.4.0"
+#define MyAppVersion "1.4.1"
 #define MyAppPublisher "VPS File Manager"
 #define MyAppExeName "VPSFileManager.exe"
 
@@ -48,7 +48,7 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall
 
 [Code]
 function InitializeSetup(): Boolean;
