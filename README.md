@@ -14,19 +14,19 @@
 
 <p align="center">
   <!-- Tech Stack Badges -->
-  <img src="https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET 8.0" />
-  <img src="https://img.shields.io/badge/WPF-UI%203.0-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="WPF-UI" />
-  <img src="https://img.shields.io/badge/Monaco-Editor-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white" alt="Monaco Editor" />
-  <img src="https://img.shields.io/badge/SSH.NET-2023.0.1-green?style=for-the-badge&logo=gnubash&logoColor=white" alt="SSH.NET" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License" />
+  <a href="https://dotnet.microsoft.com/"><img src="https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" alt=".NET 8.0" /></a>
+  <a href="https://github.com/lepoco/wpfui"><img src="https://img.shields.io/badge/WPF-UI%203.0-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="WPF-UI" /></a>
+  <a href="https://microsoft.github.io/monaco-editor/"><img src="https://img.shields.io/badge/Monaco-Editor-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white" alt="Monaco Editor" /></a>
+  <a href="https://github.com/sshnet/SSH.NET"><img src="https://img.shields.io/badge/SSH.NET-2023.0.1-green?style=for-the-badge&logo=gnubash&logoColor=white" alt="SSH.NET" /></a>
+  <a href="https://github.com/MatheusANBS/VPS-File-Mannager/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License" /></a>
 </p>
 
 <p align="center">
   <!-- Stats & Status Badges (com cache para evitar rate limiting) -->
-  <img src="https://img.shields.io/github/downloads/MatheusANBS/VPS-File-Mannager/total?style=flat-square&color=blue" alt="Total Downloads" />
-  <img src="https://img.shields.io/github/v/release/MatheusANBS/VPS-File-Mannager?style=flat-square&cacheSeconds=3600" alt="Latest Release" />
-  <img src="https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square" alt="Status" />
-  <img src="https://img.shields.io/badge/Windows-10%2F11-0078D6?style=flat-square&logo=windows&logoColor=white" alt="Windows" />
+  <a href="https://github.com/MatheusANBS/VPS-File-Mannager/releases"><img src="https://img.shields.io/github/downloads/MatheusANBS/VPS-File-Mannager/total?style=flat-square&color=blue" alt="Total Downloads" /></a>
+  <a href="https://github.com/MatheusANBS/VPS-File-Mannager/releases/latest"><img src="https://img.shields.io/github/v/release/MatheusANBS/VPS-File-Mannager?style=flat-square&cacheSeconds=3600" alt="Latest Release" /></a>
+  <a href="https://github.com/MatheusANBS/VPS-File-Mannager/actions"><img src="https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square" alt="Status" /></a>
+  <a href="https://github.com/MatheusANBS/VPS-File-Mannager/releases/latest"><img src="https://img.shields.io/badge/Windows-10%2F11-0078D6?style=flat-square&logo=windows&logoColor=white" alt="Windows" /></a>
 </p>
 
 ---
