@@ -173,7 +173,8 @@ Gerenciar servidores VPS exige múltiplas ferramentas desconectadas. Você perde
 </p>
 
 - **Monaco Editor** embarcado (mesmo engine do VS Code)
-- Syntax highlighting (60+ linguagens)
+- Syntax highlighting (60+ linguagens) com suporte completo a JSX/TSX
+- Validação de sintaxe em tempo real (sem falsos positivos de módulos)
 - IntelliSense, autocomplete e code folding
 - Minimap, word wrap e tamanho de fonte ajustável
 - Toolbar visual com todos os comandos acessíveis

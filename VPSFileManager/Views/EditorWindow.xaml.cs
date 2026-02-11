@@ -32,7 +32,9 @@ namespace VPSFileManager.Views
             // Quando o Monaco estiver pronto, carregar o conteúdo
             MonacoEditor.EditorReady += async (s, e) =>
             {
-                await MonacoEditor.SetContentAsync(viewModel.Content, language);
+                // Criar URI virtual do arquivo remoto para resolução de módulos
+                var fileUri = $"file://{viewModel.FilePath.Replace('\\', '/')}";
+                await MonacoEditor.SetContentWithUriAsync(viewModel.Content, language, fileUri);
             };
 
             // Content changes do Monaco -> ViewModel
@@ -84,7 +86,8 @@ namespace VPSFileManager.Views
             // passado via _pendingContent no MonacoEditorControl
             if (!string.IsNullOrEmpty(viewModel.Content))
             {
-                _ = MonacoEditor.SetContentAsync(viewModel.Content, language);
+                var fileUri = $"file://{viewModel.FilePath.Replace('\\', '/')}";
+                _ = MonacoEditor.SetContentWithUriAsync(viewModel.Content, language, fileUri);
             }
         }
 

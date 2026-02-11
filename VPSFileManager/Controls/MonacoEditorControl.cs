@@ -20,6 +20,7 @@ namespace VPSFileManager.Controls
         private bool _isEditorReady;
         private string? _pendingContent;
         private string? _pendingLanguage;
+        private string? _pendingFileUri;
         private TaskCompletionSource<bool>? _readyTcs;
 
         /// <summary>Indica se o editor Monaco está pronto para uso.</summary>
@@ -195,9 +196,17 @@ namespace VPSFileManager.Controls
                         // Se havia conteúdo pendente, aplicar agora
                         if (_pendingContent != null)
                         {
-                            _ = SetContentAsync(_pendingContent, _pendingLanguage ?? "plaintext");
+                            if (!string.IsNullOrEmpty(_pendingFileUri))
+                            {
+                                _ = SetContentWithUriAsync(_pendingContent, _pendingLanguage ?? "plaintext", _pendingFileUri);
+                            }
+                            else
+                            {
+                                _ = SetContentAsync(_pendingContent, _pendingLanguage ?? "plaintext");
+                            }
                             _pendingContent = null;
                             _pendingLanguage = null;
+                            _pendingFileUri = null;
                         }
                         break;
 
@@ -274,6 +283,25 @@ namespace VPSFileManager.Controls
             // Escapar o conteúdo para JavaScript
             var escapedContent = EscapeForJs(content);
             await ExecuteJsAsync($"setContent({escapedContent}, '{language}')");
+        }
+
+        /// <summary>
+        /// Define o conteúdo com URI de arquivo virtual.
+        /// A URI garante que arquivos .tsx/.jsx sejam reconhecidos corretamente pelo Monaco.
+        /// </summary>
+        public async Task SetContentWithUriAsync(string content, string language, string fileUri)
+        {
+            if (!_isEditorReady)
+            {
+                _pendingContent = content;
+                _pendingLanguage = language;
+                _pendingFileUri = fileUri;
+                return;
+            }
+
+            var escapedContent = EscapeForJs(content);
+            var escapedUri = EscapeForJs(fileUri);
+            await ExecuteJsAsync($"setContentWithUri({escapedContent}, '{language}', {escapedUri})");
         }
 
         /// <summary>

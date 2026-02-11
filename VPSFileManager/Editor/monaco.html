@@ -41,6 +41,43 @@ window.MonacoEnvironment = {
 };
 
 require(['vs/editor/editor.main'], function() {
+
+    // ================================================================
+    // Desabilitar validação semântica — Monaco standalone não tem
+    // acesso ao node_modules, então não consegue resolver módulos.
+    // Mantém apenas validação de SINTAXE (parênteses, chaves, etc.)
+    // ================================================================
+
+    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: true,
+        noSyntaxValidation: false
+    });
+
+    monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+        target: monaco.languages.typescript.ScriptTarget.ESNext,
+        module: monaco.languages.typescript.ModuleKind.ESNext,
+        jsx: monaco.languages.typescript.JsxEmit.React,
+        allowJs: true,
+        allowSyntheticDefaultImports: true,
+        esModuleInterop: true,
+        allowNonTsExtensions: true
+    });
+
+    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: true,
+        noSyntaxValidation: false
+    });
+
+    monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+        target: monaco.languages.typescript.ScriptTarget.ESNext,
+        module: monaco.languages.typescript.ModuleKind.ESNext,
+        jsx: monaco.languages.typescript.JsxEmit.React,
+        allowJs: true,
+        allowSyntheticDefaultImports: true,
+        esModuleInterop: true,
+        allowNonTsExtensions: true
+    });
+
     // Definir tema VS Code Dark+ (replicação fiel)
     monaco.editor.defineTheme('vscode-dark-plus', {
         base: 'vs-dark',
@@ -280,6 +317,8 @@ function notifyHost(type, data) {
 // API exposed to C# via ExecuteScriptAsync
 // ====================================================================
 
+var currentFileUri = null;
+
 function setContent(text, language) {
     if (!editor) return;
     currentLanguage = language || 'plaintext';
@@ -291,6 +330,48 @@ function setContent(text, language) {
         monaco.editor.setModelLanguage(model, currentLanguage);
         editor.setValue(text);
     }
+    editor.revealLine(1);
+    editor.focus();
+}
+
+/**
+ * Define conteúdo com URI de arquivo virtual (necessário para resolução de módulos).
+ * @param {string} text - Conteúdo do arquivo
+ * @param {string} language - Linguagem do Monaco (typescript, javascript, etc.)
+ * @param {string} fileUri - URI virtual do arquivo (ex: 'file:///home/user/project/src/App.tsx')
+ */
+function setContentWithUri(text, language, fileUri) {
+    if (!editor) return;
+    
+    currentLanguage = language || 'plaintext';
+    originalContent = text;
+    isDirty = false;
+    currentFileUri = fileUri;
+    
+    // Criar um novo modelo com URI
+    var uri = fileUri ? monaco.Uri.parse(fileUri) : null;
+    var oldModel = editor.getModel();
+    
+    // Verificar se já existe um modelo com essa URI
+    var newModel = uri ? monaco.editor.getModel(uri) : null;
+    
+    if (newModel) {
+        // Modelo já existe, apenas atualizar o valor
+        newModel.setValue(text);
+        if (editor.getModel() !== newModel) {
+            editor.setModel(newModel);
+        }
+    } else {
+        // Criar novo modelo
+        newModel = monaco.editor.createModel(text, currentLanguage, uri);
+        editor.setModel(newModel);
+        
+        // Descartar modelo antigo se existir e não tiver URI
+        if (oldModel && !oldModel.uri.path) {
+            oldModel.dispose();
+        }
+    }
+    
     editor.revealLine(1);
     editor.focus();
 }

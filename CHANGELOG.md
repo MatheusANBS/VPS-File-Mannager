@@ -2,6 +2,15 @@
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 
+## [1.3.1] - 2026-02-11
+
+### Editor — Monaco Validação
+- **Fix**: Erros falsos de "Cannot find module" em arquivos `.tsx`/`.jsx` — Monaco standalone não tem acesso ao `node_modules` remoto
+- Desabilitada validação semântica para TypeScript/JavaScript (mantém validação de sintaxe)
+- Configurado `compilerOptions` com suporte a JSX (`JsxEmit.React`) e ESNext
+- Adicionado `setContentWithUri()` — carrega arquivos com URI virtual para reconhecimento correto de `.tsx`/`.jsx`
+- EditorWindow agora usa URI virtual do arquivo remoto ao abrir (`file:///path/to/file.tsx`)
+
 ## [1.3.0] - 2026-02-10
 
 ### Dashboard — Monitoramento em Tempo Real
