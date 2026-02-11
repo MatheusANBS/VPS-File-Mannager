@@ -2,7 +2,7 @@
 ; Instalador SEM permissões de administrador
 
 #define MyAppName "VPS File Manager"
-#define MyAppVersion "1.1.0"
+#define MyAppVersion "1.4.0"
 #define MyAppPublisher "VPS File Manager"
 #define MyAppExeName "VPSFileManager.exe"
 
