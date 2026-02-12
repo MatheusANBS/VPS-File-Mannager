@@ -358,7 +358,7 @@ namespace VPSFileManager.ViewModels
 
             ConnectionInfo = SelectedSavedConnection.ToConnectionInfo();
             ConnectionName = SelectedSavedConnection.Name;
-            
+
             // Carregar favoritos da conexão
             FavoritePaths.Clear();
             if (SelectedSavedConnection.FavoritePaths != null)
@@ -383,7 +383,7 @@ namespace VPSFileManager.ViewModels
                 // Carregar informações da conexão
                 ConnectionInfo = savedConnection.ToConnectionInfo();
                 ConnectionName = savedConnection.Name;
-                
+
                 // Carregar favoritos
                 FavoritePaths.Clear();
                 if (savedConnection.FavoritePaths != null)
@@ -401,7 +401,7 @@ namespace VPSFileManager.ViewModels
                 ShowConnectionDialog = false;
                 StatusMessage = $"Connected to {ConnectionInfo.Host}";
                 SelectedSavedConnection = savedConnection;
-                
+
                 // Salvar como última conexão para auto-connect
                 _appSettings.LastConnectionId = savedConnection.Id;
                 _appSettings.Save();
@@ -420,7 +420,7 @@ namespace VPSFileManager.ViewModels
             catch (Exception ex)
             {
                 StatusMessage = $"Connection failed: {ex.Message}";
-                MessageBox.Show($"Failed to connect: {ex.Message}", "Connection Error", 
+                MessageBox.Show($"Failed to connect: {ex.Message}", "Connection Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
@@ -473,15 +473,15 @@ namespace VPSFileManager.ViewModels
                 // Salvar credenciais se solicitado
                 if (SaveCredentials)
                 {
-                    var name = string.IsNullOrEmpty(ConnectionName) 
-                        ? $"{ConnectionInfo.Username}@{ConnectionInfo.Host}" 
+                    var name = string.IsNullOrEmpty(ConnectionName)
+                        ? $"{ConnectionInfo.Username}@{ConnectionInfo.Host}"
                         : ConnectionName;
-                    
+
                     var savedConn = SavedConnection.FromConnectionInfo(ConnectionInfo, name);
                     _credentialManager.AddConnection(savedConn);
                     SelectedSavedConnection = savedConn;
                     LoadSavedConnections();
-                    
+
                     _appSettings.LastConnectionId = savedConn.Id;
                     _appSettings.Save();
                 }
@@ -500,7 +500,7 @@ namespace VPSFileManager.ViewModels
             catch (Exception ex)
             {
                 StatusMessage = $"Connection failed: {ex.Message}";
-                MessageBox.Show($"Failed to connect: {ex.Message}", "Connection Error", 
+                MessageBox.Show($"Failed to connect: {ex.Message}", "Connection Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
@@ -557,9 +557,9 @@ namespace VPSFileManager.ViewModels
                 SelectedSavedConnection.FavoritePaths = FavoritePaths.ToList();
                 _credentialManager.AddConnection(SelectedSavedConnection);
             }
-            
+
             _sftpService.Disconnect();
-            
+
             IsConnected = false;
             ShowConnectionDialog = true;
             Files.Clear();
@@ -626,9 +626,9 @@ namespace VPSFileManager.ViewModels
                     var (fullPath, relativePath) = allFiles[i];
                     StatusMessage = $"Uploading {i + 1}/{allFiles.Count}: {relativePath}";
                     var remotePath = $"{CurrentPath}/{relativePath}".Replace("\\", "/").Replace("//", "/");
-                    
+
                     System.Diagnostics.Debug.WriteLine($"Uploading: {fullPath} -> {remotePath}");
-                    
+
                     try
                     {
                         await _sftpService.UploadFileAsync(fullPath, remotePath, null);
@@ -643,7 +643,7 @@ namespace VPSFileManager.ViewModels
 
                 StatusMessage = $"Uploaded {allFiles.Count} file(s)";
                 ShowSnackbar("Upload Complete", $"Successfully uploaded {allFiles.Count} file(s)");
-                
+
                 await Task.Delay(500);
                 await RefreshDirectoryAsync();
             }
@@ -667,7 +667,7 @@ namespace VPSFileManager.ViewModels
             {
                 IsLoading = true;
                 var items = await _sftpService.ListDirectoryAsync(CurrentPath);
-                
+
                 _allFiles.Clear();
                 foreach (var item in items)
                 {
@@ -706,15 +706,15 @@ namespace VPSFileManager.ViewModels
         private void UpdateBreadcrumb()
         {
             BreadcrumbItems.Clear();
-            
+
             // Add root
             BreadcrumbItems.Add(new BreadcrumbItem("🏠 root", "/", CurrentPath == "/"));
-            
+
             if (CurrentPath != "/")
             {
                 var parts = CurrentPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
                 var currentBuiltPath = "";
-                
+
                 for (int i = 0; i < parts.Length; i++)
                 {
                     currentBuiltPath += "/" + parts[i];
@@ -869,7 +869,7 @@ namespace VPSFileManager.ViewModels
         private async Task OpenItemAsync(FileItem? item)
         {
             if (item == null) return;
-            
+
             // Se for arquivo de texto, abrir no editor
             if (!item.IsDirectory && IsTextFile(item.Name))
             {
@@ -934,7 +934,7 @@ namespace VPSFileManager.ViewModels
 
             var parent = Path.GetDirectoryName(CurrentPath)?.Replace("\\", "/") ?? "/";
             if (string.IsNullOrEmpty(parent)) parent = "/";
-            
+
             CurrentPath = parent;
             await RefreshDirectoryAsync();
         }
@@ -966,7 +966,7 @@ namespace VPSFileManager.ViewModels
             if (searchDialog.ShowDialog() == true && searchDialog.SelectedResult != null)
             {
                 var result = searchDialog.SelectedResult;
-                
+
                 // Se for diretório, navegar até ele
                 if (result.IsDirectory)
                 {
@@ -979,7 +979,7 @@ namespace VPSFileManager.ViewModels
                     var directory = System.IO.Path.GetDirectoryName(result.FullPath)?.Replace("\\", "/") ?? "/";
                     CurrentPath = directory;
                     await RefreshDirectoryAsync();
-                    
+
                     // Selecionar o arquivo
                     var file = Files.FirstOrDefault(f => f.FullPath == result.FullPath);
                     if (file != null)
@@ -1003,10 +1003,10 @@ namespace VPSFileManager.ViewModels
             }
 
             FavoritePaths.Add(CurrentPath);
-            
+
             // Salvar favoritos na conexão atual
             SaveFavoritesToConnection();
-            
+
             ShowSnackbar("Bookmark Added", $"Added {CurrentPath} to favorites");
         }
 
@@ -1016,10 +1016,10 @@ namespace VPSFileManager.ViewModels
             if (string.IsNullOrEmpty(path) || !FavoritePaths.Contains(path)) return;
 
             FavoritePaths.Remove(path);
-            
+
             // Salvar favoritos na conexão atual
             SaveFavoritesToConnection();
-            
+
             ShowSnackbar("Bookmark Removed", $"Removed {path} from favorites");
         }
 
@@ -1027,7 +1027,7 @@ namespace VPSFileManager.ViewModels
         private async Task NavigateToFavoriteAsync(string? path)
         {
             if (string.IsNullOrEmpty(path)) return;
-            
+
             // Validar existência antes de navegar
             try
             {
@@ -1042,7 +1042,7 @@ namespace VPSFileManager.ViewModels
                     {
                         Owner = Application.Current?.MainWindow
                     };
-                        
+
                     if (confirmDialog.ShowDialog() == true)
                     {
                         RemoveFavorite(path);
@@ -1055,7 +1055,7 @@ namespace VPSFileManager.ViewModels
                 ShowNotification("Navigation Error", $"Cannot access path: {ex.Message}", Wpf.Ui.Controls.InfoBarSeverity.Error);
                 return;
             }
-            
+
             await NavigateToPathAsync(path);
         }
 
@@ -1112,12 +1112,12 @@ namespace VPSFileManager.ViewModels
             {
                 await _uploadSemaphore.WaitAsync();
                 _uploadCancellation = new System.Threading.CancellationTokenSource();
-                
+
                 try
                 {
                     System.Threading.Interlocked.Increment(ref _activeUploads);
                     IsUploading = _activeUploads > 0;
-                    
+
                     var totalFiles = dialog.FileNames.Length;
                     var currentFile = 0;
 
@@ -1128,7 +1128,7 @@ namespace VPSFileManager.ViewModels
                             StatusMessage = "Upload cancelled";
                             break;
                         }
-                        
+
                         currentFile++;
                         var fileName = Path.GetFileName(file);
                         var remotePath = $"{CurrentPath}/{fileName}".Replace("//", "/");
@@ -1148,7 +1148,7 @@ namespace VPSFileManager.ViewModels
                 catch (Exception ex)
                 {
                     StatusMessage = $"Upload failed: {ex.Message}";
-                    MessageBox.Show($"Upload failed: {ex.Message}", "Error", 
+                    MessageBox.Show($"Upload failed: {ex.Message}", "Error",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 finally
@@ -1181,7 +1181,7 @@ namespace VPSFileManager.ViewModels
 
             // Baixar arquivos e pastas selecionados
             var itemsToDownload = SelectedFiles.Where(f => f.Name != "..").ToList();
-            
+
             if (itemsToDownload.Count == 0)
             {
                 ShowNotification("No Selection", "Please select file(s) or folder(s) to download.", Wpf.Ui.Controls.InfoBarSeverity.Warning);
@@ -1363,7 +1363,7 @@ namespace VPSFileManager.ViewModels
                 catch (Exception ex)
                 {
                     StatusMessage = $"Failed to create folder: {ex.Message}";
-                    MessageBox.Show($"Failed to create folder: {ex.Message}", "Error", 
+                    MessageBox.Show($"Failed to create folder: {ex.Message}", "Error",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
@@ -1380,7 +1380,7 @@ namespace VPSFileManager.ViewModels
 
             // Usar múltiplos arquivos selecionados ou apenas o selecionado
             var filesToDelete = SelectedFiles.Where(f => f.Name != "..").ToList();
-            
+
             if (filesToDelete.Count == 0)
             {
                 if (SelectedFile != null && SelectedFile.Name != "..")
@@ -1420,7 +1420,7 @@ namespace VPSFileManager.ViewModels
                     foreach (var file in filesToDelete)
                     {
                         StatusMessage = $"Deleting {file.Name}...";
-                        
+
                         try
                         {
                             if (file.IsDirectory)
@@ -1507,9 +1507,9 @@ namespace VPSFileManager.ViewModels
                 {
                     IsLoading = true;
                     StatusMessage = $"Deleting {item.Name}...";
-                    
+
                     System.Diagnostics.Debug.WriteLine($"Deleting: {item.FullPath} (IsDirectory: {item.IsDirectory})");
-                    
+
                     try
                     {
                         if (item.IsDirectory)
@@ -1706,9 +1706,9 @@ namespace VPSFileManager.ViewModels
                 var username = ConnectionInfo.Username;
                 var host = ConnectionInfo.Host;
                 var port = ConnectionInfo.Port;
-                
+
                 var sshCommand = $"ssh {username}@{host}";
-                
+
                 if (port != 22)
                 {
                     sshCommand += $" -p {port}";
@@ -1839,7 +1839,7 @@ namespace VPSFileManager.ViewModels
         private async Task CommitEditPathAsync()
         {
             IsEditingPath = false;
-            
+
             if (string.IsNullOrWhiteSpace(EditablePath))
             {
                 EditablePath = CurrentPath;
@@ -1854,7 +1854,7 @@ namespace VPSFileManager.ViewModels
             // Verificar se path existe
             if (!await _sftpService.DirectoryExistsAsync(normalizedPath))
             {
-                ShowNotification("Invalid Path", $"Directory '{normalizedPath}' does not exist.", 
+                ShowNotification("Invalid Path", $"Directory '{normalizedPath}' does not exist.",
                     Wpf.Ui.Controls.InfoBarSeverity.Warning);
                 EditablePath = CurrentPath;
                 return;
@@ -1864,7 +1864,7 @@ namespace VPSFileManager.ViewModels
             SaveCurrentSelections();
             _navigationBackStack.Push(CurrentPath);
             _navigationForwardStack.Clear();
-            
+
             CurrentPath = normalizedPath;
             await RefreshDirectoryAsync();
             RestoreSelections();
@@ -1901,12 +1901,12 @@ namespace VPSFileManager.ViewModels
         private void UpdatePathSegments()
         {
             PathSegments.Clear();
-            
+
             var segments = CurrentPath.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
             var currentFullPath = "";
 
             PathSegments.Add("/");
-            
+
             foreach (var segment in segments)
             {
                 currentFullPath += "/" + segment;

@@ -42,7 +42,7 @@ namespace VPSFileManager.ViewModels
 
         // ── Disk ──
         [ObservableProperty] private ObservableCollection<DiskDisplayInfo> _disks = new();
-        
+
         // ── Primary disk (for donut chart) ──
         [ObservableProperty] private double _primaryDiskUsage;
         [ObservableProperty] private string _primaryDiskUsed = "";

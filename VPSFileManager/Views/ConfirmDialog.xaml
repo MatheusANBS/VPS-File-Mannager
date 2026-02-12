@@ -31,7 +31,7 @@
             </StackPanel>
 
             <!-- Message -->
-            <TextBlock x:Name="MessageText" Grid.Row="1" Text="Are you sure you want to proceed?" 
+            <TextBlock x:Name="MessageText" Grid.Row="1" Text="Are you sure you want to proceed?"
                        FontSize="13" Opacity="0.8" TextWrapping="Wrap" Margin="0,0,0,20"/>
 
             <!-- Buttons -->

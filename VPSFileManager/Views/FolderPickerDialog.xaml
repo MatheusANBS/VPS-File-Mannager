@@ -54,7 +54,7 @@
                 <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
                     <StackPanel>
                         <TextBlock Text="QUICK ACCESS" FontSize="10" FontWeight="Bold" Opacity="0.5" Margin="4,0,0,8"/>
-                        
+
                         <ui:Button x:Name="DesktopButton" Icon="{ui:SymbolIcon Desktop24}" Content="Desktop" Appearance="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,4" Click="SpecialFolder_Click" Tag="Desktop"/>
                         <ui:Button x:Name="DocumentsButton" Icon="{ui:SymbolIcon Document24}" Content="Documents" Appearance="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,4" Click="SpecialFolder_Click" Tag="MyDocuments"/>
                         <ui:Button x:Name="DownloadsButton" Icon="{ui:SymbolIcon ArrowDownload24}" Content="Downloads" Appearance="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,0,0,4" Click="SpecialFolder_Click" Tag="Downloads"/>

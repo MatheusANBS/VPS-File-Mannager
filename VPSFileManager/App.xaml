@@ -36,7 +36,7 @@
                     <SolidColorBrush x:Key="ControlFillColorDefaultBrush" Color="{StaticResource HoverColor}"/>
                     <SolidColorBrush x:Key="SelectionBackgroundBrush" Color="{StaticResource SelectionColor}"/>
                     <SolidColorBrush x:Key="TransparentBrush" Color="#00000000"/>
-                    
+
                     <SolidColorBrush x:Key="SuccessBrush" Color="#3FB950"/>
                     <SolidColorBrush x:Key="WarningBrush" Color="#D29922"/>
                     <SolidColorBrush x:Key="ErrorBrush" Color="#F85149"/>

@@ -62,13 +62,13 @@ namespace VPSFileManager.ViewModels
         {
             _sftpService = sftpService;
             _remotePath = remotePath;
-            
+
             Content = content;
             _originalContent = content;
             FileName = Path.GetFileName(remotePath);
             FilePath = remotePath;
             Title = $"Editing: {FileName}";
-            
+
             LineCount = content.Split('\n').Length;
             FileSize = Models.FileItem.FormatFileSize(System.Text.Encoding.UTF8.GetByteCount(content));
         }
@@ -84,7 +84,7 @@ namespace VPSFileManager.ViewModels
             try
             {
                 StatusMessage = "Saving...";
-                
+
                 try
                 {
                     await _sftpService.WriteFileFromStringAsync(_remotePath, Content);
@@ -108,10 +108,10 @@ namespace VPSFileManager.ViewModels
                         return;
                     }
                 }
-                
+
                 _originalContent = Content; // Atualizar conteúdo original após salvar
                 StatusMessage = $"Saved at {DateTime.Now:HH:mm:ss}";
-                
+
                 // Auto-hide status após 3 segundos
                 await Task.Delay(3000);
                 StatusMessage = "Ready";

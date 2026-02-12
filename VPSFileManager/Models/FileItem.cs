@@ -63,7 +63,7 @@ namespace VPSFileManager.Models
             get
             {
                 if (IsDirectory) return "#FFD54F"; // Amarelo para pastas
-                
+
                 var ext = System.IO.Path.GetExtension(Name).ToLower();
                 return ext switch
                 {

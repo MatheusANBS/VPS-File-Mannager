@@ -6,7 +6,7 @@
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         xmlns:vm="clr-namespace:VPSFileManager.ViewModels"
         mc:Ignorable="d"
-        Title="Tasks" 
+        Title="Tasks"
         Height="700" Width="1000"
         MinHeight="500" MinWidth="800"
         WindowStartupLocation="CenterOwner"
@@ -32,8 +32,8 @@
             </Grid.ColumnDefinitions>
 
             <!-- TASKS SIDEBAR -->
-            <Border Background="{DynamicResource CardBackgroundBrush}" 
-                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" 
+            <Border Background="{DynamicResource CardBackgroundBrush}"
+                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                     BorderThickness="0,0,1,0"
                     Padding="12">
                 <Grid>
@@ -55,11 +55,11 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <ui:SymbolIcon Grid.Column="0" Symbol="ShieldKeyhole24" FontSize="16" 
+                            <ui:SymbolIcon Grid.Column="0" Symbol="ShieldKeyhole24" FontSize="16"
                                            VerticalAlignment="Center" Margin="0,0,8,0"/>
-                            <TextBlock Grid.Column="1" Text="Usar sudo" FontSize="12" 
+                            <TextBlock Grid.Column="1" Text="Usar sudo" FontSize="12"
                                        VerticalAlignment="Center"/>
-                            <CheckBox Grid.Column="2" IsChecked="{Binding UseSudo}" 
+                            <CheckBox Grid.Column="2" IsChecked="{Binding UseSudo}"
                                       VerticalAlignment="Center" Margin="0"/>
                         </Grid>
                     </Border>
@@ -69,14 +69,14 @@
                         <ItemsControl ItemsSource="{Binding Tasks}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <ui:Button Margin="0,0,0,6" Padding="12,10" HorizontalAlignment="Stretch" 
-                                               HorizontalContentAlignment="Left" Appearance="Transparent" 
+                                    <ui:Button Margin="0,0,0,6" Padding="12,10" HorizontalAlignment="Stretch"
+                                               HorizontalContentAlignment="Left" Appearance="Transparent"
                                                Background="{DynamicResource ControlFillColorDefaultBrush}"
                                                Command="{Binding DataContext.SelectTaskCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                CommandParameter="{Binding}">
                                         <StackPanel>
                                             <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="12"/>
-                                            <TextBlock Text="{Binding Description}" FontSize="9" Opacity="0.5" 
+                                            <TextBlock Text="{Binding Description}" FontSize="9" Opacity="0.5"
                                                        TextWrapping="Wrap" Margin="0,2,0,0"/>
                                         </StackPanel>
                                     </ui:Button>
@@ -86,7 +86,7 @@
                     </ScrollViewer>
 
                     <!-- Close Button -->
-                    <ui:Button Grid.Row="2" Content="Close" Appearance="Secondary" 
+                    <ui:Button Grid.Row="2" Content="Close" Appearance="Secondary"
                                HorizontalAlignment="Stretch" Margin="0,8,0,0"
                                Click="Close_Click"/>
                 </Grid>
@@ -104,28 +104,28 @@
                     </Grid.RowDefinitions>
 
                     <!-- Task Info Panel -->
-                    <Border Grid.Row="0" Background="{DynamicResource ControlFillColorDefaultBrush}" 
+                    <Border Grid.Row="0" Background="{DynamicResource ControlFillColorDefaultBrush}"
                             Padding="12" CornerRadius="6" Margin="0,0,0,12"
                             Visibility="{Binding SelectedTask, Converter={StaticResource ObjectToVisibilityConverter}}">
                         <StackPanel>
                             <TextBlock Text="{Binding SelectedTask.Name}" FontSize="14" FontWeight="Bold" Margin="0,0,0,4"/>
-                            <TextBlock Text="{Binding SelectedTask.Description}" FontSize="11" Opacity="0.6" 
+                            <TextBlock Text="{Binding SelectedTask.Description}" FontSize="11" Opacity="0.6"
                                        TextWrapping="Wrap" Margin="0,0,0,8"/>
-                            <TextBlock Text="{Binding SelectedTask.Command}" FontSize="10" FontFamily="Courier New" 
+                            <TextBlock Text="{Binding SelectedTask.Command}" FontSize="10" FontFamily="Courier New"
                                        Opacity="0.4" TextWrapping="Wrap" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
                         </StackPanel>
                     </Border>
 
                     <!-- Options Selection -->
-                    <Border Grid.Row="1" Background="{DynamicResource ControlFillColorDefaultBrush}" 
+                    <Border Grid.Row="1" Background="{DynamicResource ControlFillColorDefaultBrush}"
                             Padding="12" CornerRadius="6" Margin="0,0,0,12"
                             Visibility="{Binding SelectedTask.RequiresSelection, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <StackPanel>
                             <TextBlock Text="Select Option" FontSize="11" FontWeight="Bold" Margin="0,0,0,8"/>
-                            <ComboBox ItemsSource="{Binding SelectedTask.AvailableOptions}" 
-                                      SelectedItem="{Binding SelectedTask.SelectedOption}" 
+                            <ComboBox ItemsSource="{Binding SelectedTask.AvailableOptions}"
+                                      SelectedItem="{Binding SelectedTask.SelectedOption}"
                                       Margin="0,0,0,8" Padding="8,6" Height="32"/>
-                            <ui:Button Content="Load Options" Command="{Binding LoadTaskOptionsCommand}" 
+                            <ui:Button Content="Load Options" Command="{Binding LoadTaskOptionsCommand}"
                                        Appearance="Secondary" HorizontalAlignment="Stretch"/>
                         </StackPanel>
                     </Border>
@@ -133,9 +133,9 @@
                     <!-- Terminal Output -->
                     <Border Grid.Row="2" Background="#1E1E1E" CornerRadius="6" Padding="12" Margin="0,0,0,12">
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <TextBlock Text="{Binding TaskOutput}" 
-                                       FontFamily="Courier New" FontSize="11" 
-                                       Opacity="0.9" TextWrapping="Wrap" 
+                            <TextBlock Text="{Binding TaskOutput}"
+                                       FontFamily="Courier New" FontSize="11"
+                                       Opacity="0.9" TextWrapping="Wrap"
                                        Foreground="#D4D4D4"
                                        Padding="8"
                                        LineHeight="1.5"/>
@@ -146,17 +146,17 @@
                     <StackPanel Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center"
                                 Visibility="{Binding SelectedTask, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
                         <ui:SymbolIcon Symbol="Play24" FontSize="64" Opacity="0.1" HorizontalAlignment="Center"/>
-                        <TextBlock Text="Select a task from the left" Opacity="0.3" 
+                        <TextBlock Text="Select a task from the left" Opacity="0.3"
                                    HorizontalAlignment="Center" Margin="0,16,0,0" FontSize="13"/>
                     </StackPanel>
 
                     <!-- Controls -->
                     <StackPanel Grid.Row="3" Orientation="Horizontal">
-                        <ui:Button Content="Execute" Appearance="Success" Padding="20,8" 
+                        <ui:Button Content="Execute" Appearance="Success" Padding="20,8"
                                    Command="{Binding ExecuteTaskCommand}"
                                    IsEnabled="{Binding IsExecuting, Converter={StaticResource InverseBooleanConverter}}"
                                    Margin="0,0,8,0"/>
-                        <ui:Button Content="Clear Output" Appearance="Secondary" Padding="20,8" 
+                        <ui:Button Content="Clear Output" Appearance="Secondary" Padding="20,8"
                                    Command="{Binding ClearOutputCommand}"
                                    Margin="0,0,8,0"/>
                         <ui:ProgressRing IsIndeterminate="True" Width="24" Height="24" Margin="12,0,0,0"

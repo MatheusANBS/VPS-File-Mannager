@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         xmlns:vm="clr-namespace:VPSFileManager.ViewModels"
-        Title="Settings" 
+        Title="Settings"
         Height="500" Width="450"
         WindowStartupLocation="CenterOwner"
         WindowBackdropType="None"
@@ -57,12 +57,12 @@
         </ScrollViewer>
 
         <!-- Footer -->
-        <ui:Button Grid.Row="2" 
-                   Content="Done" 
-                   Command="{Binding CloseCommand}" 
-                   Appearance="Primary" 
-                   HorizontalAlignment="Right" 
-                   Padding="32,12" 
+        <ui:Button Grid.Row="2"
+                   Content="Done"
+                   Command="{Binding CloseCommand}"
+                   Appearance="Primary"
+                   HorizontalAlignment="Right"
+                   Padding="32,12"
                    Margin="0,24,0,0"
                    Icon="{ui:SymbolIcon Checkmark24}"/>
     </Grid>

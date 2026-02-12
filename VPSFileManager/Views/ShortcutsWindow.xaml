@@ -466,9 +466,9 @@
         <!-- Rodapé -->
         <Border Grid.Row="2" Padding="20,10" Background="#1e1e1e" BorderBrush="#2d2d30" BorderThickness="0,1,0,0">
             <DockPanel>
-                <TextBlock Text="Tip: Press F1 in the editor to open Command Palette" 
+                <TextBlock Text="Tip: Press F1 in the editor to open Command Palette"
                            FontSize="11" Foreground="#666" VerticalAlignment="Center"/>
-                <ui:Button Content="Close" Appearance="Secondary" Padding="20,6" 
+                <ui:Button Content="Close" Appearance="Secondary" Padding="20,6"
                            HorizontalAlignment="Right" Click="OnClose" MinWidth="80"/>
             </DockPanel>
         </Border>

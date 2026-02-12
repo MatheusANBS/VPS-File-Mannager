@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         xmlns:controls="clr-namespace:VPSFileManager.Controls"
-        Title="Terminal — SSH" 
+        Title="Terminal — SSH"
         Height="650" Width="1000"
         MinHeight="400" MinWidth="600"
         WindowStartupLocation="CenterOwner"
@@ -23,13 +23,13 @@
 
         <!-- Terminal Control -->
         <Border Grid.Row="1" Background="#1E1E1E" Padding="4,2,4,2">
-            <controls:TerminalControl x:Name="TerminalView" 
+            <controls:TerminalControl x:Name="TerminalView"
                                        Focusable="True"
                                        IsEnabled="True"/>
         </Border>
 
         <!-- Status Bar -->
-        <Border Grid.Row="2" Background="#252526" Padding="12,6" 
+        <Border Grid.Row="2" Background="#252526" Padding="12,6"
                 BorderBrush="#3C3C3C" BorderThickness="0,1,0,0">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -47,11 +47,11 @@
                 </StackPanel>
 
                 <!-- Info da conexão -->
-                <TextBlock Grid.Column="1" x:Name="ConnectionLabel" Text="" Foreground="#606060" FontSize="11" 
+                <TextBlock Grid.Column="1" x:Name="ConnectionLabel" Text="" Foreground="#606060" FontSize="11"
                            VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
                 <!-- Tamanho do terminal -->
-                <TextBlock Grid.Column="2" x:Name="SizeLabel" Text="120x30" Foreground="#606060" FontSize="11" 
+                <TextBlock Grid.Column="2" x:Name="SizeLabel" Text="120x30" Foreground="#606060" FontSize="11"
                            VerticalAlignment="Center" Margin="20,0,0,0"/>
 
                 <!-- Separador -->

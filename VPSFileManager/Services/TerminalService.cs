@@ -24,7 +24,7 @@ namespace VPSFileManager.Services
         private bool _rawMode = false;
 
         public bool IsConnected => _isConnected && _shellStream != null;
-        
+
         /// <summary>
         /// Dados recebidos do shell. No modo Raw, inclui sequências ANSI.
         /// </summary>
@@ -98,7 +98,7 @@ namespace VPSFileManager.Services
             {
                 var buffer = new byte[8192];
                 var charBuffer = new char[8192];
-                
+
                 while (!token.IsCancellationRequested && _shellStream != null)
                 {
                     try
@@ -181,7 +181,7 @@ namespace VPSFileManager.Services
                 // SSH.NET não expõe isso publicamente, mas o protocolo suporta
                 var channelField = _shellStream.GetType().GetField("_channel",
                     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                
+
                 if (channelField != null)
                 {
                     var channel = channelField.GetValue(_shellStream);
@@ -189,7 +189,7 @@ namespace VPSFileManager.Services
                     {
                         var sendMethod = channel.GetType().GetMethod("SendPseudoTerminalRequest",
                             System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-                        
+
                         // Se não encontrar, tentar via SendWindowChangeRequest
                         var windowChangeMethod = channel.GetType().GetMethod("SendWindowChangeRequest",
                             System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
@@ -219,7 +219,7 @@ namespace VPSFileManager.Services
         {
             _isConnected = false;
             _readCts?.Cancel();
-            
+
             _shellStream?.Close();
             _shellStream?.Dispose();
             _shellStream = null;

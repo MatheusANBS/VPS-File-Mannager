@@ -25,7 +25,7 @@ namespace VPSFileManager.Services
         public async Task ConnectAsync(Models.ConnectionInfo connectionInfo)
         {
             var cts = new System.Threading.CancellationTokenSource(TimeSpan.FromSeconds(15));
-            
+
             try
             {
                 await Task.Run(() =>
@@ -63,7 +63,7 @@ namespace VPSFileManager.Services
                     _currentDirectory = _sftpClient.WorkingDirectory;
                     _username = connectionInfo.Username;
                 }, cts.Token);
-                
+
                 // Log conexão bem-sucedida
                 SecurityLogger.Instance.LogConnection(connectionInfo.Host, connectionInfo.Username, true);
             }
@@ -171,11 +171,11 @@ namespace VPSFileManager.Services
                 // Criar diretório recursivamente (pais primeiro)
                 var parts = path.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
                 var currentPath = path.StartsWith("/") ? "/" : "";
-                
+
                 foreach (var part in parts)
                 {
                     currentPath = currentPath == "/" ? $"/{part}" : $"{currentPath}/{part}";
-                    
+
                     try
                     {
                         if (!_sftpClient.Exists(currentPath))
@@ -217,7 +217,7 @@ namespace VPSFileManager.Services
             {
                 var command = _sshClient.CreateCommand($"rm -rf {EscapeShellArgument(path)}");
                 var result = command.Execute();
-                
+
                 if (command.ExitStatus != 0)
                 {
                     var error = command.Error;
@@ -232,11 +232,11 @@ namespace VPSFileManager.Services
                 throw new InvalidOperationException("Not connected to server");
 
             System.Diagnostics.Debug.WriteLine($"Deleting directory: {path}");
-            
+
             try
             {
                 var files = _sftpClient.ListDirectory(path);
-                
+
                 foreach (var file in files.Where(f => f.Name != "." && f.Name != ".."))
                 {
                     try
@@ -270,7 +270,7 @@ namespace VPSFileManager.Services
                         throw new Exception($"Failed to delete '{file.Name}': {ex.Message}", ex);
                     }
                 }
-                
+
                 System.Diagnostics.Debug.WriteLine($"  Removing directory: {path}");
                 _sftpClient.DeleteDirectory(path);
             }
@@ -329,18 +329,18 @@ namespace VPSFileManager.Services
                 using var sourceStream = _sftpClient.OpenRead(sourcePath);
                 var fileInfo = _sftpClient.Get(sourcePath);
                 var fileSize = fileInfo.Length;
-                
+
                 using var destStream = _sftpClient.Create(destPath);
-                
+
                 var buffer = new byte[81920]; // 80KB buffer
                 long totalBytesRead = 0;
                 int bytesRead;
-                
+
                 while ((bytesRead = sourceStream.Read(buffer, 0, buffer.Length)) > 0)
                 {
                     destStream.Write(buffer, 0, bytesRead);
                     totalBytesRead += bytesRead;
-                    
+
                     if (progress != null && fileSize > 0)
                     {
                         var percentage = (double)totalBytesRead / fileSize * 100;
@@ -400,20 +400,20 @@ namespace VPSFileManager.Services
                 using var cmd = _sshClient.CreateCommand(fullCommand);
                 cmd.CommandTimeout = TimeSpan.FromSeconds(30);
                 var result = cmd.Execute();
-                
+
                 var output = cmd.Result;
                 var error = cmd.Error;
-                
+
                 if (!string.IsNullOrEmpty(error))
                 {
                     return $"Error: {error}";
                 }
-                
+
                 if (string.IsNullOrEmpty(output))
                 {
                     return "(no output)";
                 }
-                
+
                 return output.TrimEnd();
             });
         }
@@ -432,14 +432,14 @@ namespace VPSFileManager.Services
             return await Task.Run(() =>
             {
                 var escapedDirectory = EscapeShellArgument(_currentDirectory);
-                
+
                 // Remover "sudo " do comando se existir
                 var commandWithoutSudo = command.StartsWith("sudo ") ? command.Substring(5) : command;
-                
+
                 // Usar método mais seguro: escrever senha em arquivo temporário protegido
                 var tempScriptPath = $"/tmp/.sudo_script_{Guid.NewGuid():N}.sh";
                 var scriptContent = $"#!/bin/bash\ncd {escapedDirectory}\n{commandWithoutSudo}";
-                
+
                 try
                 {
                     // Upload script
@@ -447,25 +447,25 @@ namespace VPSFileManager.Services
                     {
                         _sftpClient.UploadFile(stream, tempScriptPath);
                     }
-                    
+
                     // Executar com sudo usando -S (stdin) de forma mais segura
                     var sudoCommand = $"echo {EscapeShellArgument(password)} | sudo -S -p '' bash {EscapeShellArgument(tempScriptPath)}";
                     using var cmd = _sshClient.CreateCommand(sudoCommand);
                     cmd.CommandTimeout = TimeSpan.FromSeconds(30);
                     var result = cmd.Execute();
-                    
+
                     var output = cmd.Result;
                     var error = cmd.Error;
-                    
+
                     // Limpar mensagens de sudo
                     output = Regex.Replace(output, @"\[sudo\].*", "");
                     output = output.Trim();
-                    
+
                     if (cmd.ExitStatus != 0 && !string.IsNullOrEmpty(error))
                     {
                         return $"Error: {error}";
                     }
-                    
+
                     return string.IsNullOrEmpty(output) ? "(no output)" : output;
                 }
                 finally
@@ -559,7 +559,7 @@ namespace VPSFileManager.Services
 
                     // Tentar parsear JSON primeiro
                     var apps = ParsePM2JsonOutput(output);
-                    
+
                     // Se JSON falhou, tentar formato de tabela
                     if (apps.Count == 0)
                     {
@@ -570,7 +570,7 @@ namespace VPSFileManager.Services
                             output = ExecuteCommandAsync(command).GetAwaiter().GetResult();
                         apps = ParsePM2TableOutput(output);
                     }
-                    
+
                     return apps;
                 }
                 catch (Exception ex)
@@ -595,15 +595,15 @@ namespace VPSFileManager.Services
 
                 // Remover códigos ANSI
                 output = RemoveAnsiCodes(output);
-                
+
                 // Tentar encontrar um array JSON na saída
                 var jsonStart = output.IndexOf('[');
                 var jsonEnd = output.LastIndexOf(']');
-                
+
                 if (jsonStart >= 0 && jsonEnd > jsonStart)
                 {
                     var jsonContent = output.Substring(jsonStart, jsonEnd - jsonStart + 1);
-                    
+
                     // Parse manual simples de JSON para extrair nomes
                     var matches = Regex.Matches(jsonContent, @"""name""\s*:\s*""([^""]+)""");
                     foreach (Match match in matches)
@@ -636,7 +636,7 @@ namespace VPSFileManager.Services
 
             // Remover códigos ANSI
             output = RemoveAnsiCodes(output);
-            
+
             var lines = output.Split(new[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (var line in lines)
@@ -644,19 +644,19 @@ namespace VPSFileManager.Services
                 // Ignorar linhas vazias, cabeçalhos e separadores
                 if (string.IsNullOrWhiteSpace(line))
                     continue;
-                    
+
                 var cleanLine = line.Trim();
-                
+
                 if (cleanLine.Contains("┤") || cleanLine.Contains("│"))
                 {
                     // Tentar vários padrões de regex
                     // Padrão 1: │ id │ name │ mode │ status │ ...
                     var match = Regex.Match(cleanLine, @"[│┤]\s*\d+\s*[│┤]\s*([a-zA-Z0-9_-]+)\s*[│┤]");
-                    
+
                     if (match.Success)
                     {
                         var appName = match.Groups[1].Value.Trim();
-                        if (!string.IsNullOrEmpty(appName) && 
+                        if (!string.IsNullOrEmpty(appName) &&
                             !appName.Equals("name", StringComparison.OrdinalIgnoreCase) &&
                             !apps.Contains(appName))
                         {
@@ -739,7 +739,7 @@ namespace VPSFileManager.Services
                 var escapedPath = EscapeShellArgument(path);
                 var tempScriptPath = $"/tmp/.sudo_delete_{Guid.NewGuid():N}.sh";
                 var scriptContent = $"#!/bin/bash\nrm -f {escapedPath}";
-                
+
                 try
                 {
                     // Criar script temporário
@@ -747,13 +747,13 @@ namespace VPSFileManager.Services
                     {
                         _sftpClient.UploadFile(stream, tempScriptPath);
                     }
-                    
+
                     // Executar com sudo
                     var sudoCommand = $"echo {EscapeShellArgument(password)} | sudo -S -p '' bash {EscapeShellArgument(tempScriptPath)}";
                     using var cmd = _sshClient.CreateCommand(sudoCommand);
                     cmd.CommandTimeout = TimeSpan.FromSeconds(10);
                     var result = cmd.Execute();
-                    
+
                     if (cmd.ExitStatus != 0 && !string.IsNullOrEmpty(cmd.Error))
                     {
                         var error = cmd.Error.Replace("[sudo] password for", "").Trim();
@@ -789,7 +789,7 @@ namespace VPSFileManager.Services
                 var escapedPath = EscapeShellArgument(path);
                 var tempScriptPath = $"/tmp/.sudo_rmrf_{Guid.NewGuid():N}.sh";
                 var scriptContent = $"#!/bin/bash\nrm -rf {escapedPath}";
-                
+
                 try
                 {
                     // Criar script temporário
@@ -797,13 +797,13 @@ namespace VPSFileManager.Services
                     {
                         _sftpClient.UploadFile(stream, tempScriptPath);
                     }
-                    
+
                     // Executar com sudo
                     var sudoCommand = $"echo {EscapeShellArgument(password)} | sudo -S -p '' bash {EscapeShellArgument(tempScriptPath)}";
                     using var cmd = _sshClient.CreateCommand(sudoCommand);
                     cmd.CommandTimeout = TimeSpan.FromSeconds(15);
                     var result = cmd.Execute();
-                    
+
                     if (cmd.ExitStatus != 0 && !string.IsNullOrEmpty(cmd.Error))
                     {
                         var error = cmd.Error.Replace("[sudo] password for", "").Trim();
@@ -839,7 +839,7 @@ namespace VPSFileManager.Services
                 // Upload do conteúdo para um arquivo temporário
                 var tempFilePath = $"/tmp/.content_{Guid.NewGuid():N}.tmp";
                 var tempScriptPath = $"/tmp/.sudo_write_{Guid.NewGuid():N}.sh";
-                
+
                 try
                 {
                     // Upload do conteúdo para arquivo temporário
@@ -847,23 +847,23 @@ namespace VPSFileManager.Services
                     {
                         _sftpClient.UploadFile(stream, tempFilePath);
                     }
-                    
+
                     // Criar script que move o arquivo com permissões corretas
                     var escapedRemotePath = EscapeShellArgument(remotePath);
                     var escapedTempPath = EscapeShellArgument(tempFilePath);
                     var scriptContent = $"#!/bin/bash\\ncat {escapedTempPath} > {escapedRemotePath}\\nrm -f {escapedTempPath}";
-                    
+
                     using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(scriptContent)))
                     {
                         _sftpClient.UploadFile(stream, tempScriptPath);
                     }
-                    
+
                     // Executar com sudo
                     var sudoCommand = $"echo {EscapeShellArgument(password)} | sudo -S -p '' bash {EscapeShellArgument(tempScriptPath)}";
                     using var cmd = _sshClient.CreateCommand(sudoCommand);
                     cmd.CommandTimeout = TimeSpan.FromSeconds(10);
                     var result = cmd.Execute();
-                    
+
                     if (cmd.ExitStatus != 0)
                     {
                         var error = cmd.Error?.Replace("[sudo] password for", "").Trim();

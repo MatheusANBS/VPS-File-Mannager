@@ -28,17 +28,17 @@
             </StackPanel>
 
             <!-- Message -->
-            <TextBlock x:Name="MessageText" Grid.Row="1" 
-                       Text="Do you want to save changes before closing?" 
+            <TextBlock x:Name="MessageText" Grid.Row="1"
+                       Text="Do you want to save changes before closing?"
                        FontSize="13" Opacity="0.8" TextWrapping="Wrap" Margin="0,0,0,24"/>
 
             <!-- Buttons: Cancel | Don't Save | Save -->
             <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
-                <ui:Button Content="Cancel" Appearance="Transparent" Padding="20,8" 
+                <ui:Button Content="Cancel" Appearance="Transparent" Padding="20,8"
                            Click="Cancel_Click" MinWidth="90" Margin="0,0,8,0"/>
-                <ui:Button Content="Don't Save" Appearance="Secondary" Padding="20,8" 
+                <ui:Button Content="Don't Save" Appearance="Secondary" Padding="20,8"
                            Click="DontSave_Click" MinWidth="100" Margin="0,0,8,0"/>
-                <ui:Button Content="Save" Appearance="Primary" Padding="20,8" 
+                <ui:Button Content="Save" Appearance="Primary" Padding="20,8"
                            Click="Save_Click" MinWidth="90"
                            Icon="{ui:SymbolIcon Save24}"/>
             </StackPanel>

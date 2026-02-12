@@ -31,7 +31,7 @@ namespace VPSFileManager.Services
             // Misturar com dados únicos do processo para bind à instância
             var pid = System.Diagnostics.Process.GetCurrentProcess().Id;
             var pidBytes = BitConverter.GetBytes(pid);
-            
+
             for (int i = 0; i < pidBytes.Length; i++)
             {
                 _processKey[i] ^= pidBytes[i];
@@ -58,7 +58,7 @@ namespace VPSFileManager.Services
                 {
                     aes.Key = _processKey;
                     aes.IV = _processIV;
-                    
+
                     using (var encryptor = aes.CreateEncryptor())
                     {
                         _encryptedPasswordInMemory = encryptor.TransformFinalBlock(bytes, 0, bytes.Length);
@@ -95,7 +95,7 @@ namespace VPSFileManager.Services
                 {
                     aes.Key = _processKey;
                     aes.IV = _processIV;
-                    
+
                     using (var decryptor = aes.CreateDecryptor())
                     {
                         decrypted = decryptor.TransformFinalBlock(_encryptedPasswordInMemory, 0, _encryptedPasswordInMemory.Length);

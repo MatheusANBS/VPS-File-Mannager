@@ -85,11 +85,11 @@ namespace VPSFileManager.Services
             // Format: "2: eth0: ...\n    inet 192.168.1.10/24 ..."
             var lines = data.Split('\n');
             string? currentIface = null;
-            
+
             foreach (var line in lines)
             {
                 var trimmed = line.Trim();
-                
+
                 // Interface line: "2: eth0: <...>"
                 if (!trimmed.StartsWith("inet") && trimmed.Contains(":"))
                 {
@@ -110,7 +110,7 @@ namespace VPSFileManager.Services
                     {
                         var ipWithMask = parts[1];
                         var ip = ipWithMask.Split('/')[0];
-                        
+
                         // Find matching network interface and set IP
                         var netIface = m.NetworkInterfaces.Find(n => n.Name == currentIface);
                         if (netIface != null && string.IsNullOrEmpty(netIface.IpAddress))

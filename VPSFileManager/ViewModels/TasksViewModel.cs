@@ -202,7 +202,7 @@ namespace VPSFileManager.ViewModels
 
                 // Chamar o serviço para listar aplicações PM2
                 var apps = await _sftpService.GetPM2ApplicationsListAsync(UseSudo ? _password : null);
-                
+
                 if (apps.Count == 0)
                 {
                     TaskOutput += "⚠️ Nenhuma aplicação PM2 foi encontrada.\n";
@@ -212,7 +212,7 @@ namespace VPSFileManager.ViewModels
                 {
                     TaskOutput += $"✓ Encontradas {apps.Count} aplicação(ões): {string.Join(", ", apps)}\n";
                 }
-                
+
                 return apps;
             }
             catch (Exception ex)
@@ -249,7 +249,7 @@ namespace VPSFileManager.ViewModels
             try
             {
                 var command = ApplySudo(SelectedTask.GetFinalCommand());
-                
+
                 // Se usando sudo e não temos senha, pedir
                 if (UseSudo && string.IsNullOrEmpty(_password))
                 {
@@ -307,7 +307,7 @@ namespace VPSFileManager.ViewModels
                 TaskOutput = $"Carregando opções para {SelectedTask.Name}...\n";
 
                 var options = await SelectedTask.OptionsLoaderFunc(SelectedTask.Command);
-                
+
                 SelectedTask.AvailableOptions.Clear();
                 foreach (var option in options)
                 {

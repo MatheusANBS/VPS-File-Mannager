@@ -195,7 +195,7 @@ namespace VPSFileManager.Services
             {
                 // Inno Setup silent install flags
                 // /VERYSILENT = sem interface
-                // /SUPPRESSMSGBOXES = sem caixas de diálogo  
+                // /SUPPRESSMSGBOXES = sem caixas de diálogo
                 // /NORESTART = não reiniciar o Windows
                 // /CLOSEAPPLICATIONS = fechar a aplicação se estiver rodando
                 var startInfo = new ProcessStartInfo

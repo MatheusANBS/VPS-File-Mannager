@@ -4,7 +4,7 @@
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         xmlns:local="clr-namespace:VPSFileManager.Views"
         xmlns:controls="clr-namespace:VPSFileManager.Controls"
-        Title="VPS Dashboard" 
+        Title="VPS Dashboard"
         Width="1100" Height="720"
         MinWidth="900" MinHeight="600"
         WindowStartupLocation="CenterOwner"
@@ -62,7 +62,7 @@
             <Border Background="#DD0A0A0A"/>
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <ui:ProgressRing IsIndeterminate="True" Width="48" Height="48"/>
-                <TextBlock Text="Collecting system metrics..." Foreground="#777777" 
+                <TextBlock Text="Collecting system metrics..." Foreground="#777777"
                            FontSize="12" HorizontalAlignment="Center" Margin="0,16,0,0"/>
             </StackPanel>
         </Grid>
@@ -72,11 +72,11 @@
                 Visibility="{Binding HasError, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                 <ui:SymbolIcon Symbol="ErrorCircle24" FontSize="40" Foreground="#EF4444"/>
-                <TextBlock Text="Failed to collect metrics" FontSize="14" Foreground="#EF4444" 
+                <TextBlock Text="Failed to collect metrics" FontSize="14" Foreground="#EF4444"
                            HorizontalAlignment="Center" Margin="0,12,0,4"/>
-                <TextBlock Text="{Binding ErrorMessage}" FontSize="11" Foreground="#666666" 
+                <TextBlock Text="{Binding ErrorMessage}" FontSize="11" Foreground="#666666"
                            HorizontalAlignment="Center" TextWrapping="Wrap" MaxWidth="400"/>
-                <ui:Button Content="Retry" Command="{Binding RefreshMetricsCommand}" 
+                <ui:Button Content="Retry" Command="{Binding RefreshMetricsCommand}"
                            Appearance="Primary" Margin="0,16,0,0" HorizontalAlignment="Center"/>
             </StackPanel>
         </Border>
@@ -104,12 +104,12 @@
                                 Visibility="{Binding IsRefreshing, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <StackPanel Orientation="Horizontal">
                                 <ui:ProgressRing IsIndeterminate="True" Width="12" Height="12"/>
-                                <TextBlock Text="Refreshing" FontSize="10" Foreground="#555555" 
+                                <TextBlock Text="Refreshing" FontSize="10" Foreground="#555555"
                                            Margin="6,0,0,0" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Border>
 
-                        <ui:Button Icon="{ui:SymbolIcon ArrowSync24}" 
+                        <ui:Button Icon="{ui:SymbolIcon ArrowSync24}"
                                    Command="{Binding RefreshMetricsCommand}"
                                    Appearance="Transparent" Padding="6" ToolTip="Refresh Status"/>
                     </StackPanel>
@@ -155,7 +155,7 @@
                                                 <Binding Path="CpuUsage" StringFormat="{}{0:0}%"/>
                                             </TextBlock.Text>
                                         </TextBlock>
-                                        <TextBlock Text="{Binding CpuCores, StringFormat=' {0} CPUs'}" 
+                                        <TextBlock Text="{Binding CpuCores, StringFormat=' {0} CPUs'}"
                                                    Style="{StaticResource SubLabel}" VerticalAlignment="Bottom" Margin="4,0,0,8"/>
                                     </StackPanel>
                                     <TextBlock Text="{Binding LoadAverage, StringFormat='Avg {0}'}" Style="{StaticResource SubLabel}"/>
@@ -242,7 +242,7 @@
                                 <Viewbox Width="100" Height="100" Margin="0,0,16,0">
                                     <Grid Width="100" Height="100">
                                         <!-- Background circle -->
-                                        <Ellipse Stroke="#1F1F1F" StrokeThickness="10" Fill="Transparent" 
+                                        <Ellipse Stroke="#1F1F1F" StrokeThickness="10" Fill="Transparent"
                                                  Width="90" Height="90" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                         <!-- Value arc -->
                                         <Ellipse Stroke="#F59E0B" StrokeThickness="10" Fill="Transparent"
@@ -255,7 +255,7 @@
                                             </Ellipse.RenderTransform>
                                         </Ellipse>
                                         <!-- Center text -->
-                                        <TextBlock FontSize="22" FontWeight="Bold" Foreground="#F59E0B" 
+                                        <TextBlock FontSize="22" FontWeight="Bold" Foreground="#F59E0B"
                                                    HorizontalAlignment="Center" VerticalAlignment="Center">
                                             <TextBlock.Text>
                                                 <Binding Path="PrimaryDiskUsage" StringFormat="{}{0:0}%"/>
@@ -334,7 +334,7 @@
                             </ItemsControl>
 
                             <!-- Empty state -->
-                            <TextBlock Text="No network interfaces" Style="{StaticResource SubLabel}" 
+                            <TextBlock Text="No network interfaces" Style="{StaticResource SubLabel}"
                                        HorizontalAlignment="Center" Margin="0,8,0,0"
                                        Visibility="{Binding NetworkInterfaces.Count, Converter={StaticResource ZeroToVisibilityConverter}}"/>
                         </StackPanel>
@@ -359,9 +359,9 @@
                                     <ui:SymbolIcon Symbol="HeartPulse24" FontSize="28" Foreground="#8B5CF6"
                                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
-                                <TextBlock Text="{Binding UptimeDisplay}" FontSize="24" FontWeight="Bold" 
+                                <TextBlock Text="{Binding UptimeDisplay}" FontSize="24" FontWeight="Bold"
                                            Foreground="#8B5CF6" HorizontalAlignment="Center"/>
-                                <TextBlock Text="Total Uptime" Style="{StaticResource SubLabel}" 
+                                <TextBlock Text="Total Uptime" Style="{StaticResource SubLabel}"
                                            HorizontalAlignment="Center" Margin="0,4,0,0"/>
                             </StackPanel>
                         </Grid>
@@ -480,7 +480,7 @@
                                                         </Style>
                                                     </TextBlock.Style>
                                                 </TextBlock>
-                                                <TextBlock Grid.Column="3" Text="{Binding Command}" FontSize="10" Foreground="#AAAAAA" 
+                                                <TextBlock Grid.Column="3" Text="{Binding Command}" FontSize="10" Foreground="#AAAAAA"
                                                            FontFamily="Consolas" TextTrimming="CharacterEllipsis"/>
                                             </Grid>
                                         </Border>
@@ -543,7 +543,7 @@
                                                         </Style>
                                                     </TextBlock.Style>
                                                 </TextBlock>
-                                                <TextBlock Grid.Column="3" Text="{Binding Command}" FontSize="10" Foreground="#AAAAAA" 
+                                                <TextBlock Grid.Column="3" Text="{Binding Command}" FontSize="10" Foreground="#AAAAAA"
                                                            FontFamily="Consolas" TextTrimming="CharacterEllipsis"/>
                                             </Grid>
                                         </Border>

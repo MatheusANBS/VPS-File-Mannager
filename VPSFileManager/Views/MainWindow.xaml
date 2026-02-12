@@ -6,7 +6,7 @@
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
         xmlns:vm="clr-namespace:VPSFileManager.ViewModels"
         mc:Ignorable="d"
-        Title="VPS File Manager" 
+        Title="VPS File Manager"
         Height="850" Width="1200"
         MinHeight="600" MinWidth="900"
         WindowStartupLocation="CenterScreen"
@@ -38,7 +38,7 @@
     <Window.Resources>
         <!-- Storyboard para animações de fade-in -->
         <Storyboard x:Key="FadeInStoryboard">
-            <DoubleAnimation 
+            <DoubleAnimation
                 Storyboard.TargetProperty="Opacity"
                 From="0" To="1" Duration="0:0:0.3">
                 <DoubleAnimation.EasingFunction>
@@ -46,16 +46,16 @@
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
         </Storyboard>
-        
+
         <Storyboard x:Key="SlideInStoryboard">
-            <DoubleAnimation 
+            <DoubleAnimation
                 Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
                 From="20" To="0" Duration="0:0:0.3">
                 <DoubleAnimation.EasingFunction>
                     <QuadraticEase EasingMode="EaseOut"/>
                 </DoubleAnimation.EasingFunction>
             </DoubleAnimation>
-            <DoubleAnimation 
+            <DoubleAnimation
                 Storyboard.TargetProperty="Opacity"
                 From="0" To="1" Duration="0:0:0.3"/>
         </Storyboard>
@@ -72,9 +72,9 @@
 
         <!-- Main Content Root -->
         <Grid Grid.Row="1">
-            
+
             <!-- CONNECTION LAYER (Dialog overlay) -->
-            <Grid x:Name="ConnectionDialog" 
+            <Grid x:Name="ConnectionDialog"
                   Visibility="{Binding ShowConnectionDialog, Converter={StaticResource BooleanToVisibilityConverter}}"
                   Panel.ZIndex="100"
                   Background="#0D0D0D">
@@ -97,9 +97,9 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- ════════ Saved Connections Sidebar ════════ -->
-                    <Border Background="#161616" 
-                            CornerRadius="16,0,0,16" 
-                            BorderBrush="#2A2A2A" 
+                    <Border Background="#161616"
+                            CornerRadius="16,0,0,16"
+                            BorderBrush="#2A2A2A"
                             BorderThickness="1,1,0,1">
                         <Grid Margin="16,20">
                             <Grid.RowDefinitions>
@@ -112,7 +112,7 @@
                             <Border Margin="0,0,0,16" Padding="10,8" CornerRadius="8" Background="#1A1A1A">
                                 <StackPanel Orientation="Horizontal">
                                     <ui:SymbolIcon Symbol="History24" FontSize="16" Foreground="#0078D4"/>
-                                    <TextBlock Text="Recent Connections" FontSize="12" FontWeight="SemiBold" 
+                                    <TextBlock Text="Recent Connections" FontSize="12" FontWeight="SemiBold"
                                                Margin="8,0,0,0" VerticalAlignment="Center" Foreground="#AAAAAA"/>
                                 </StackPanel>
                             </Border>
@@ -133,7 +133,7 @@
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="ListBoxItem">
-                                                    <Border x:Name="Bd" Background="Transparent" 
+                                                    <Border x:Name="Bd" Background="Transparent"
                                                             CornerRadius="8" Padding="10,8">
                                                         <ContentPresenter/>
                                                     </Border>
@@ -159,13 +159,13 @@
                                                 <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
-                                            <Border Width="32" Height="32" CornerRadius="6" Background="#1E1E1E" 
+                                            <Border Width="32" Height="32" CornerRadius="6" Background="#1E1E1E"
                                                     VerticalAlignment="Center" Margin="0,0,10,0">
-                                                <ui:SymbolIcon Symbol="Desktop24" FontSize="14" Foreground="#0078D4" 
+                                                <ui:SymbolIcon Symbol="Desktop24" FontSize="14" Foreground="#0078D4"
                                                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                             </Border>
                                             <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                                <TextBlock Text="{Binding Name}" FontWeight="Medium" FontSize="12" 
+                                                <TextBlock Text="{Binding Name}" FontWeight="Medium" FontSize="12"
                                                            Foreground="#E0E0E0"/>
                                                 <TextBlock Text="{Binding Host}" FontSize="10" Foreground="#666666" Margin="0,2,0,0"/>
                                             </StackPanel>
@@ -178,12 +178,12 @@
                             <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"
                                         Visibility="{Binding SavedConnections.Count, Converter={StaticResource ZeroToVisibilityConverter}}">
                                 <ui:SymbolIcon Symbol="PlugDisconnected24" FontSize="32" Foreground="#333333" HorizontalAlignment="Center"/>
-                                <TextBlock Text="No saved connections" FontSize="11" Foreground="#444444" 
+                                <TextBlock Text="No saved connections" FontSize="11" Foreground="#444444"
                                            HorizontalAlignment="Center" Margin="0,8,0,0"/>
                             </StackPanel>
 
                             <!-- Remove button -->
-                            <ui:Button Grid.Row="2" 
+                            <ui:Button Grid.Row="2"
                                        Command="{Binding DeleteSavedConnectionCommand}"
                                        Icon="{ui:SymbolIcon Delete24}"
                                        Content="Remove"
@@ -195,23 +195,23 @@
                     </Border>
 
                     <!-- ════════ Connection Form ════════ -->
-                    <Border Grid.Column="1" 
-                            Background="#191919" 
+                    <Border Grid.Column="1"
+                            Background="#191919"
                             CornerRadius="0,16,16,0"
-                            BorderBrush="#2A2A2A" 
+                            BorderBrush="#2A2A2A"
                             BorderThickness="0,1,1,1">
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <Grid Margin="40,32">
                             <StackPanel>
                                 <!-- Hero header -->
                                 <StackPanel HorizontalAlignment="Left" Margin="0,0,0,32">
-                                    <Border Width="48" Height="48" CornerRadius="12" Background="#1A0078D4" 
+                                    <Border Width="48" Height="48" CornerRadius="12" Background="#1A0078D4"
                                             HorizontalAlignment="Left" Margin="0,0,0,16">
-                                        <ui:SymbolIcon Symbol="PlugConnected24" FontSize="22" Foreground="#0078D4" 
+                                        <ui:SymbolIcon Symbol="PlugConnected24" FontSize="22" Foreground="#0078D4"
                                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
                                     <TextBlock Text="Connect to Server" FontSize="22" FontWeight="Bold" Foreground="#F0F0F0"/>
-                                    <TextBlock Text="Enter your VPS credentials to establish an SFTP connection" 
+                                    <TextBlock Text="Enter your VPS credentials to establish an SFTP connection"
                                                FontSize="12" Foreground="#777777" Margin="0,6,0,0"/>
                                 </StackPanel>
 
@@ -221,7 +221,7 @@
                                         <ui:SymbolIcon Symbol="Tag24" FontSize="14" Foreground="#888888" Margin="0,0,6,0"/>
                                         <TextBlock Text="Connection Name" FontSize="11" Foreground="#999999" FontWeight="Medium"/>
                                     </StackPanel>
-                                    <ui:TextBox PlaceholderText="My Server" 
+                                    <ui:TextBox PlaceholderText="My Server"
                                                 Text="{Binding ConnectionName, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
 
@@ -236,7 +236,7 @@
                                             <ui:SymbolIcon Symbol="Globe24" FontSize="14" Foreground="#888888" Margin="0,0,6,0"/>
                                             <TextBlock Text="Host" FontSize="11" Foreground="#999999" FontWeight="Medium"/>
                                         </StackPanel>
-                                        <ui:TextBox PlaceholderText="192.168.1.1 or domain.com" 
+                                        <ui:TextBox PlaceholderText="192.168.1.1 or domain.com"
                                                     Text="{Binding ConnectionInfo.Host, UpdateSourceTrigger=PropertyChanged}"/>
                                     </StackPanel>
                                     <StackPanel Grid.Column="1" Margin="10,0,0,0">
@@ -244,7 +244,7 @@
                                             <ui:SymbolIcon Symbol="NumberRow24" FontSize="14" Foreground="#888888" Margin="0,0,6,0"/>
                                             <TextBlock Text="Port" FontSize="11" Foreground="#999999" FontWeight="Medium"/>
                                         </StackPanel>
-                                        <ui:TextBox Text="{Binding ConnectionInfo.Port, UpdateSourceTrigger=PropertyChanged}" 
+                                        <ui:TextBox Text="{Binding ConnectionInfo.Port, UpdateSourceTrigger=PropertyChanged}"
                                                     PlaceholderText="22"/>
                                     </StackPanel>
                                 </Grid>
@@ -260,7 +260,7 @@
                                             <ui:SymbolIcon Symbol="Person24" FontSize="14" Foreground="#888888" Margin="0,0,6,0"/>
                                             <TextBlock Text="Username" FontSize="11" Foreground="#999999" FontWeight="Medium"/>
                                         </StackPanel>
-                                        <ui:TextBox PlaceholderText="root" 
+                                        <ui:TextBox PlaceholderText="root"
                                                     Text="{Binding ConnectionInfo.Username, UpdateSourceTrigger=PropertyChanged}"/>
                                     </StackPanel>
                                     <StackPanel Grid.Column="1" Margin="10,0,0,0">
@@ -318,8 +318,8 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- NAVIGATION SIDEBAR -->
-                <Border Background="#111111" 
-                        BorderBrush="#1E1E1E" 
+                <Border Background="#111111"
+                        BorderBrush="#1E1E1E"
                         BorderThickness="0,0,1,0">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -338,16 +338,16 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                
-                                <Border Width="34" Height="34" CornerRadius="8" Background="#1A0078D4" 
+
+                                <Border Width="34" Height="34" CornerRadius="8" Background="#1A0078D4"
                                         VerticalAlignment="Center" Margin="0,0,10,0">
                                     <ui:SymbolIcon Symbol="Desktop24" FontSize="16" Foreground="#0078D4"
                                                    HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 </Border>
-                                
+
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center" x:Name="SidebarLabels">
-                                    <TextBlock Text="{Binding ConnectionInfo.DisplayName}" 
-                                               FontWeight="SemiBold" FontSize="13" Foreground="#E0E0E0" 
+                                    <TextBlock Text="{Binding ConnectionInfo.DisplayName}"
+                                               FontWeight="SemiBold" FontSize="13" Foreground="#E0E0E0"
                                                TextTrimming="CharacterEllipsis"/>
                                     <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
                                         <Ellipse Width="6" Height="6" Fill="#10B981" VerticalAlignment="Center" Margin="0,0,6,0"/>
@@ -357,8 +357,8 @@
 
                                 <!-- Collapse toggle -->
                                 <ui:Button Grid.Column="2" x:Name="SidebarToggleBtn"
-                                           Icon="{ui:SymbolIcon PanelLeftContract24}" 
-                                           Appearance="Transparent" Padding="4" 
+                                           Icon="{ui:SymbolIcon PanelLeftContract24}"
+                                           Appearance="Transparent" Padding="4"
                                            Click="ToggleSidebar_Click"
                                            ToolTip="Collapse sidebar"
                                            Opacity="0.4" VerticalAlignment="Center"/>
@@ -366,42 +366,42 @@
                         </Border>
 
                         <!-- ═══ CONNECTION HEADER (Collapsed) ═══ -->
-                        <Border x:Name="SidebarHeaderCollapsed" Padding="0,10" 
+                        <Border x:Name="SidebarHeaderCollapsed" Padding="0,10"
                                 BorderBrush="#1E1E1E" BorderThickness="0,0,0,1"
                                 Visibility="Collapsed">
                             <ui:Button x:Name="SidebarExpandBtn"
-                                       Icon="{ui:SymbolIcon PanelLeftExpand24}" 
-                                       Appearance="Transparent" Padding="6" 
+                                       Icon="{ui:SymbolIcon PanelLeftExpand24}"
+                                       Appearance="Transparent" Padding="6"
                                        Click="ToggleSidebar_Click"
                                        ToolTip="Expand sidebar"
-                                       Opacity="0.5" 
+                                       Opacity="0.5"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
 
                         <!-- ═══ FILE ACTIONS ═══ -->
                         <StackPanel Grid.Row="1" Margin="12,12,12,0" x:Name="SidebarFileActions">
-                            <TextBlock Text="F I L E   A C T I O N S" FontSize="9" FontWeight="Bold" 
+                            <TextBlock Text="F I L E   A C T I O N S" FontSize="9" FontWeight="Bold"
                                        Foreground="#444444" Margin="6,0,0,8"/>
-                            <ui:Button Content="Upload" 
-                                       Icon="{ui:SymbolIcon ArrowUpload24}" 
-                                       Command="{Binding UploadFilesCommand}" 
-                                       Appearance="Transparent" 
-                                       HorizontalAlignment="Stretch" 
-                                       HorizontalContentAlignment="Left" 
+                            <ui:Button Content="Upload"
+                                       Icon="{ui:SymbolIcon ArrowUpload24}"
+                                       Command="{Binding UploadFilesCommand}"
+                                       Appearance="Transparent"
+                                       HorizontalAlignment="Stretch"
+                                       HorizontalContentAlignment="Left"
                                        Margin="0,0,0,2" Padding="10,7"/>
-                            <ui:Button Content="Download" 
-                                       Icon="{ui:SymbolIcon ArrowDownload24}" 
-                                       Command="{Binding DownloadFileCommand}" 
-                                       Appearance="Transparent" 
-                                       HorizontalAlignment="Stretch" 
-                                       HorizontalContentAlignment="Left" 
+                            <ui:Button Content="Download"
+                                       Icon="{ui:SymbolIcon ArrowDownload24}"
+                                       Command="{Binding DownloadFileCommand}"
+                                       Appearance="Transparent"
+                                       HorizontalAlignment="Stretch"
+                                       HorizontalContentAlignment="Left"
                                        Margin="0,0,0,2" Padding="10,7"/>
-                            <ui:Button Content="New Folder" 
-                                       Icon="{ui:SymbolIcon FolderAdd24}" 
-                                       Command="{Binding CreateFolderCommand}" 
-                                       Appearance="Transparent" 
-                                       HorizontalAlignment="Stretch" 
-                                       HorizontalContentAlignment="Left" 
+                            <ui:Button Content="New Folder"
+                                       Icon="{ui:SymbolIcon FolderAdd24}"
+                                       Command="{Binding CreateFolderCommand}"
+                                       Appearance="Transparent"
+                                       HorizontalAlignment="Stretch"
+                                       HorizontalContentAlignment="Left"
                                        Padding="10,7"/>
                         </StackPanel>
 
@@ -415,16 +415,16 @@
                                 <!-- FAVORITES Section -->
                                 <StackPanel Margin="12,0,12,0">
                                     <Grid Margin="0,0,0,6">
-                                    <TextBlock Text="F A V O R I T E S" FontSize="9" FontWeight="Bold" 
+                                    <TextBlock Text="F A V O R I T E S" FontSize="9" FontWeight="Bold"
                                                Foreground="#444444" Margin="6,0,0,0" VerticalAlignment="Center"/>
-                                        <ui:Button HorizontalAlignment="Right" 
-                                                   Icon="{ui:SymbolIcon StarAdd24}" 
-                                                   Command="{Binding AddCurrentToFavoritesCommand}" 
-                                                   Appearance="Transparent" Padding="4" 
+                                        <ui:Button HorizontalAlignment="Right"
+                                                   Icon="{ui:SymbolIcon StarAdd24}"
+                                                   Command="{Binding AddCurrentToFavoritesCommand}"
+                                                   Appearance="Transparent" Padding="4"
                                                    ToolTip="Bookmark current folder"
                                                    Opacity="0.5"/>
                                     </Grid>
-                                    
+
                                     <ItemsControl ItemsSource="{Binding FavoritePaths}">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
@@ -433,9 +433,9 @@
                                                         <ColumnDefinition Width="*"/>
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
-                                                    <ui:Button Content="{Binding}" 
-                                                               Appearance="Transparent" 
-                                                               HorizontalAlignment="Stretch" 
+                                                    <ui:Button Content="{Binding}"
+                                                               Appearance="Transparent"
+                                                               HorizontalAlignment="Stretch"
                                                                HorizontalContentAlignment="Left"
                                                                Command="{Binding DataContext.NavigateToFavoriteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                                                CommandParameter="{Binding}"
@@ -454,7 +454,7 @@
                                     </ItemsControl>
 
                                     <!-- Empty state -->
-                                    <TextBlock Text="No bookmarks yet" FontSize="10" Foreground="#333333" 
+                                    <TextBlock Text="No bookmarks yet" FontSize="10" Foreground="#333333"
                                                Margin="6,4,0,0"
                                                Visibility="{Binding FavoritePaths.Count, Converter={StaticResource ZeroToVisibilityConverter}}"/>
                                 </StackPanel>
@@ -464,15 +464,15 @@
 
                                 <!-- TOOLS Section -->
                                 <StackPanel Margin="12,0,12,0">
-                                    <TextBlock Text="T O O L S" FontSize="9" FontWeight="Bold" 
+                                    <TextBlock Text="T O O L S" FontSize="9" FontWeight="Bold"
                                                Foreground="#444444" Margin="6,0,0,8"/>
-                                    
-                                    <ui:Button Content="Tasks" 
-                                               Icon="{ui:SymbolIcon Play24}" 
-                                               Command="{Binding OpenTasksWindowCommand}" 
-                                               Appearance="Transparent" 
-                                               HorizontalAlignment="Stretch" 
-                                               HorizontalContentAlignment="Left" 
+
+                                    <ui:Button Content="Tasks"
+                                               Icon="{ui:SymbolIcon Play24}"
+                                               Command="{Binding OpenTasksWindowCommand}"
+                                               Appearance="Transparent"
+                                               HorizontalAlignment="Stretch"
+                                               HorizontalContentAlignment="Left"
                                                Margin="0,0,0,2" Padding="10,7">
                                         <ui:Button.Style>
                                             <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
@@ -481,12 +481,12 @@
                                         </ui:Button.Style>
                                     </ui:Button>
 
-                                    <ui:Button Content="Terminal" 
-                                               Icon="{ui:SymbolIcon WindowConsole20}" 
-                                               Command="{Binding OpenTerminalWindowCommand}" 
-                                               Appearance="Transparent" 
-                                               HorizontalAlignment="Stretch" 
-                                               HorizontalContentAlignment="Left" 
+                                    <ui:Button Content="Terminal"
+                                               Icon="{ui:SymbolIcon WindowConsole20}"
+                                               Command="{Binding OpenTerminalWindowCommand}"
+                                               Appearance="Transparent"
+                                               HorizontalAlignment="Stretch"
+                                               HorizontalContentAlignment="Left"
                                                Margin="0,0,0,2" Padding="10,7">
                                         <ui:Button.Style>
                                             <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
@@ -495,12 +495,12 @@
                                         </ui:Button.Style>
                                     </ui:Button>
 
-                                    <ui:Button Content="Dashboard" 
-                                               Icon="{ui:SymbolIcon Gauge24}" 
-                                               Command="{Binding OpenDashboardWindowCommand}" 
-                                               Appearance="Transparent" 
-                                               HorizontalAlignment="Stretch" 
-                                               HorizontalContentAlignment="Left" 
+                                    <ui:Button Content="Dashboard"
+                                               Icon="{ui:SymbolIcon Gauge24}"
+                                               Command="{Binding OpenDashboardWindowCommand}"
+                                               Appearance="Transparent"
+                                               HorizontalAlignment="Stretch"
+                                               HorizontalContentAlignment="Left"
                                                Padding="10,7">
                                         <ui:Button.Style>
                                             <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
@@ -513,34 +513,34 @@
                         </ScrollViewer>
 
                         <!-- ═══ COLLAPSED ICON STRIP ═══ -->
-                        <StackPanel Grid.Row="2" x:Name="SidebarCollapsedIcons" 
+                        <StackPanel Grid.Row="2" x:Name="SidebarCollapsedIcons"
                                     Visibility="Collapsed"
                                     HorizontalAlignment="Center" Margin="0,8,0,0">
-                            <ui:Button Icon="{ui:SymbolIcon ArrowUpload24}" 
-                                       Command="{Binding UploadFilesCommand}" 
+                            <ui:Button Icon="{ui:SymbolIcon ArrowUpload24}"
+                                       Command="{Binding UploadFilesCommand}"
                                        Appearance="Transparent" Padding="8" Margin="0,2"
                                        ToolTip="Upload" HorizontalAlignment="Center" Opacity="0.6"/>
-                            <ui:Button Icon="{ui:SymbolIcon ArrowDownload24}" 
-                                       Command="{Binding DownloadFileCommand}" 
+                            <ui:Button Icon="{ui:SymbolIcon ArrowDownload24}"
+                                       Command="{Binding DownloadFileCommand}"
                                        Appearance="Transparent" Padding="8" Margin="0,2"
                                        ToolTip="Download" HorizontalAlignment="Center" Opacity="0.6"/>
-                            <ui:Button Icon="{ui:SymbolIcon FolderAdd24}" 
-                                       Command="{Binding CreateFolderCommand}" 
+                            <ui:Button Icon="{ui:SymbolIcon FolderAdd24}"
+                                       Command="{Binding CreateFolderCommand}"
                                        Appearance="Transparent" Padding="8" Margin="0,2"
                                        ToolTip="New Folder" HorizontalAlignment="Center" Opacity="0.6"/>
-                            
+
                             <Border Height="1" Background="#1A1A1A" Margin="4,6" Width="28"/>
-                            
-                            <ui:Button Icon="{ui:SymbolIcon Play24}" 
-                                       Command="{Binding OpenTasksWindowCommand}" 
+
+                            <ui:Button Icon="{ui:SymbolIcon Play24}"
+                                       Command="{Binding OpenTasksWindowCommand}"
                                        Appearance="Transparent" Padding="8" Margin="0,2"
                                        ToolTip="Tasks" HorizontalAlignment="Center" Opacity="0.6"/>
-                            <ui:Button Icon="{ui:SymbolIcon WindowConsole20}" 
-                                       Command="{Binding OpenTerminalWindowCommand}" 
+                            <ui:Button Icon="{ui:SymbolIcon WindowConsole20}"
+                                       Command="{Binding OpenTerminalWindowCommand}"
                                        Appearance="Transparent" Padding="8" Margin="0,2"
                                        ToolTip="Terminal" HorizontalAlignment="Center" Opacity="0.6"/>
-                            <ui:Button Icon="{ui:SymbolIcon Gauge24}" 
-                                       Command="{Binding OpenDashboardWindowCommand}" 
+                            <ui:Button Icon="{ui:SymbolIcon Gauge24}"
+                                       Command="{Binding OpenDashboardWindowCommand}"
                                        Appearance="Transparent" Padding="8" Margin="0,2"
                                        ToolTip="Dashboard" HorizontalAlignment="Center" Opacity="0.6"/>
                         </StackPanel>
@@ -549,28 +549,28 @@
                         <Border Grid.Row="3" Height="1" Background="#1A1A1A" Margin="16,0"/>
 
                         <StackPanel Grid.Row="4" Margin="12,8,12,12" x:Name="SidebarFooter">
-                            <ui:Button Content="{Binding UpdateVersionText, StringFormat='Update {0}'}" 
-                                       Icon="{ui:SymbolIcon ArrowDownload24}" 
-                                       Command="{Binding ShowUpdateWindowCommand}" 
-                                       Appearance="Transparent" 
-                                       HorizontalAlignment="Stretch" 
+                            <ui:Button Content="{Binding UpdateVersionText, StringFormat='Update {0}'}"
+                                       Icon="{ui:SymbolIcon ArrowDownload24}"
+                                       Command="{Binding ShowUpdateWindowCommand}"
+                                       Appearance="Transparent"
+                                       HorizontalAlignment="Stretch"
                                        HorizontalContentAlignment="Left"
                                        Foreground="#22C55E"
                                        FontWeight="SemiBold"
                                        Padding="10,6" Margin="0,0,0,2"
                                        Visibility="{Binding IsUpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                            <ui:Button Content="Shortcuts" 
-                                       Icon="{ui:SymbolIcon Keyboard24}" 
-                                       Command="{Binding ShowHelpCommand}" 
-                                       Appearance="Transparent" 
-                                       HorizontalAlignment="Stretch" 
+                            <ui:Button Content="Shortcuts"
+                                       Icon="{ui:SymbolIcon Keyboard24}"
+                                       Command="{Binding ShowHelpCommand}"
+                                       Appearance="Transparent"
+                                       HorizontalAlignment="Stretch"
                                        HorizontalContentAlignment="Left"
                                        Foreground="#555555"
                                        Padding="10,6" Margin="0,0,0,2"/>
-                            <ui:Button Content="Disconnect" 
-                                       Icon="{ui:SymbolIcon PlugDisconnected24}" 
-                                       Command="{Binding DisconnectCommand}" 
-                                       Appearance="Transparent" 
+                            <ui:Button Content="Disconnect"
+                                       Icon="{ui:SymbolIcon PlugDisconnected24}"
+                                       Command="{Binding DisconnectCommand}"
+                                       Appearance="Transparent"
                                        HorizontalAlignment="Stretch"
                                        HorizontalContentAlignment="Left"
                                        Foreground="#EF4444"
@@ -578,23 +578,23 @@
                         </StackPanel>
 
                         <!-- ═══ COLLAPSED FOOTER ═══ -->
-                        <StackPanel Grid.Row="4" x:Name="SidebarCollapsedFooter" 
+                        <StackPanel Grid.Row="4" x:Name="SidebarCollapsedFooter"
                                     Visibility="Collapsed"
                                     HorizontalAlignment="Center" Margin="0,8,0,12">
-                            <ui:Button Icon="{ui:SymbolIcon ArrowDownload24}" 
-                                       Command="{Binding ShowUpdateWindowCommand}" 
+                            <ui:Button Icon="{ui:SymbolIcon ArrowDownload24}"
+                                       Command="{Binding ShowUpdateWindowCommand}"
                                        Appearance="Transparent" Padding="8" Margin="0,2"
-                                       ToolTip="{Binding UpdateVersionText, StringFormat='Update available: {0}'}" 
+                                       ToolTip="{Binding UpdateVersionText, StringFormat='Update available: {0}'}"
                                        HorizontalAlignment="Center"
                                        Foreground="#22C55E"
                                        Visibility="{Binding IsUpdateAvailable, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                            <ui:Button Icon="{ui:SymbolIcon Keyboard24}" 
-                                       Command="{Binding ShowHelpCommand}" 
+                            <ui:Button Icon="{ui:SymbolIcon Keyboard24}"
+                                       Command="{Binding ShowHelpCommand}"
                                        Appearance="Transparent" Padding="8" Margin="0,2"
-                                       ToolTip="Shortcuts" HorizontalAlignment="Center" 
+                                       ToolTip="Shortcuts" HorizontalAlignment="Center"
                                        Opacity="0.4"/>
-                            <ui:Button Icon="{ui:SymbolIcon PlugDisconnected24}" 
-                                       Command="{Binding DisconnectCommand}" 
+                            <ui:Button Icon="{ui:SymbolIcon PlugDisconnected24}"
+                                       Command="{Binding DisconnectCommand}"
                                        Appearance="Transparent" Padding="8" Margin="0,2"
                                        ToolTip="Disconnect" HorizontalAlignment="Center"
                                        Foreground="#EF4444"/>
@@ -603,7 +603,7 @@
                 </Border>
 
                 <!-- MAIN WORKSPACE -->
-                <Grid Grid.Column="1" 
+                <Grid Grid.Column="1"
                       Background="{DynamicResource ApplicationBackgroundBrush}"
                       AllowDrop="True"
                       Drop="FileBrowser_Drop"
@@ -661,7 +661,7 @@
 
                     <!-- FILE LISTING GRID -->
                     <Grid Grid.Row="2">
-                        
+
                         <!-- List Headers -->
                         <Border VerticalAlignment="Top" Panel.ZIndex="5" Background="{DynamicResource ApplicationBackgroundBrush}" BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="0,1" Padding="16,8">
                             <Grid>
@@ -712,23 +712,23 @@
                                             <ColumnDefinition Width="100"/>
                                             <ColumnDefinition Width="150"/>
                                         </Grid.ColumnDefinitions>
-                                        
+
                                         <Grid.ContextMenu>
                                             <ContextMenu>
-                                                <ui:MenuItem Header="Open" Icon="{ui:SymbolIcon Open24}" 
+                                                <ui:MenuItem Header="Open" Icon="{ui:SymbolIcon Open24}"
                                                            Click="ContextMenu_Open_Click"
                                                            CommandParameter="{Binding}"/>
-                                                <ui:MenuItem Header="Edit" Icon="{ui:SymbolIcon Edit24}" 
+                                                <ui:MenuItem Header="Edit" Icon="{ui:SymbolIcon Edit24}"
                                                            Click="ContextMenu_Edit_Click"
                                                            CommandParameter="{Binding}"/>
                                                 <Separator/>
-                                                <ui:MenuItem Header="Download" Icon="{ui:SymbolIcon ArrowDownload24}" 
+                                                <ui:MenuItem Header="Download" Icon="{ui:SymbolIcon ArrowDownload24}"
                                                            Click="ContextMenu_Download_Click"
                                                            CommandParameter="{Binding}"/>
-                                                <ui:MenuItem Header="Rename" Icon="{ui:SymbolIcon Rename24}" 
+                                                <ui:MenuItem Header="Rename" Icon="{ui:SymbolIcon Rename24}"
                                                            Click="ContextMenu_Rename_Click"
                                                            CommandParameter="{Binding}"/>
-                                                <ui:MenuItem Header="Delete" Icon="{ui:SymbolIcon Delete24}" 
+                                                <ui:MenuItem Header="Delete" Icon="{ui:SymbolIcon Delete24}"
                                                            Click="ContextMenu_Delete_Click"
                                                            CommandParameter="{Binding}"/>
                                             </ContextMenu>

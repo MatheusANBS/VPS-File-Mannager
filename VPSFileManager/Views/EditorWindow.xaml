@@ -9,7 +9,7 @@
                 WindowStartupLocation="CenterScreen"
                 ExtendsContentIntoTitleBar="True"
                 WindowBackdropType="Mica">
-    
+
     <Window.InputBindings>
         <KeyBinding Key="S" Modifiers="Ctrl" Command="{Binding SaveCommand}"/>
         <KeyBinding Key="W" Modifiers="Ctrl" Command="{Binding CloseCommand}"/>
@@ -33,7 +33,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
                                 CornerRadius="4" Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
@@ -49,7 +49,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <!-- Toggle button ativo -->
         <Style x:Key="ToolbarToggle" TargetType="ToggleButton">
             <Setter Property="Background" Value="Transparent"/>
@@ -65,7 +65,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToggleButton">
-                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                        <Border x:Name="border" Background="{TemplateBinding Background}"
                                 CornerRadius="4" Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
@@ -90,7 +90,7 @@
             <Setter Property="Margin" Value="6,4"/>
         </Style>
     </Window.Resources>
-    
+
     <Grid Background="#1e1e1e">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -130,7 +130,7 @@
             <DockPanel>
                 <!-- Lado esquerdo: ferramentas de edição -->
                 <StackPanel DockPanel.Dock="Left" Orientation="Horizontal">
-                    
+
                     <!-- Undo / Redo -->
                     <Button x:Name="BtnUndo" Style="{StaticResource ToolbarButton}" ToolTip="Undo  (Ctrl+Z)" Click="OnUndo">
                         <ui:SymbolIcon Symbol="ArrowUndo24" FontSize="14" Foreground="#cccccc"/>
@@ -138,7 +138,7 @@
                     <Button x:Name="BtnRedo" Style="{StaticResource ToolbarButton}" ToolTip="Redo  (Ctrl+Y)" Click="OnRedo">
                         <ui:SymbolIcon Symbol="ArrowRedo24" FontSize="14" Foreground="#cccccc"/>
                     </Button>
-                    
+
                     <Border Style="{StaticResource ToolbarSeparator}"/>
 
                     <!-- Find / Replace -->
@@ -148,7 +148,7 @@
                     <Button x:Name="BtnReplace" Style="{StaticResource ToolbarButton}" ToolTip="Find &amp; Replace  (Ctrl+H)" Click="OnReplace">
                         <ui:SymbolIcon Symbol="TextChangeCase24" FontSize="14" Foreground="#cccccc"/>
                     </Button>
-                    
+
                     <Border Style="{StaticResource ToolbarSeparator}"/>
 
                     <!-- Format / Fold -->
@@ -182,7 +182,7 @@
                         </StackPanel>
                     </Button>
                 </StackPanel>
-                
+
                 <!-- Lado direito: toggles visuais -->
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right">
 
@@ -241,25 +241,25 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                
+
                 <!-- Cursor position -->
                 <TextBlock Grid.Column="0" Text="{Binding CursorPosition}" Foreground="White" FontSize="12" Margin="4,0,16,0" VerticalAlignment="Center" FontFamily="Segoe UI"/>
-                
+
                 <!-- Selection info -->
                 <TextBlock Grid.Column="1" Text="{Binding SelectionInfo}" Foreground="White" FontSize="12" Margin="0,0,16,0" VerticalAlignment="Center" FontFamily="Segoe UI"/>
-                
+
                 <!-- Line count -->
                 <TextBlock Grid.Column="2" Text="{Binding LineCount, StringFormat='{}{0} lines'}" Foreground="White" FontSize="12" Margin="0,0,16,0" VerticalAlignment="Center" FontFamily="Segoe UI"/>
-                
+
                 <!-- Status message (centered) -->
                 <TextBlock Grid.Column="3" Text="{Binding StatusMessage}" Foreground="White" FontSize="12" VerticalAlignment="Center" FontFamily="Segoe UI"/>
-                
+
                 <!-- Language -->
                 <TextBlock Grid.Column="4" Text="{Binding LanguageDisplay}" Foreground="White" FontSize="12" Margin="16,0,0,0" VerticalAlignment="Center" FontFamily="Segoe UI"/>
-                
+
                 <!-- Encoding -->
                 <TextBlock Grid.Column="5" Text="{Binding Encoding}" Foreground="White" FontSize="12" Margin="16,0,0,0" VerticalAlignment="Center" FontFamily="Segoe UI"/>
-                
+
                 <!-- File size -->
                 <TextBlock Grid.Column="6" Text="{Binding FileSize}" Foreground="White" FontSize="12" Margin="16,0,4,0" VerticalAlignment="Center" FontFamily="Segoe UI"/>
             </Grid>

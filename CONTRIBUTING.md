@@ -42,6 +42,7 @@ Primeiramente, obrigado por considerar contribuir! 🎉
 ### Commits
 
 Use prefixos nos commits:
+
 - `Add:` - Nova funcionalidade
 - `Fix:` - Correção de bug
 - `Update:` - Atualização de funcionalidade existente

@@ -19,13 +19,13 @@ namespace VPSFileManager.Services
         {
             var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             var folder = Path.Combine(appData, "VPSFileManager");
-            
+
             if (!Directory.Exists(folder))
                 Directory.CreateDirectory(folder);
-            
+
             _filePath = Path.Combine(folder, "connections.json");
             _entropyFilePath = Path.Combine(folder, ".entropy");
-            
+
             // Gerar ou carregar entropia aleatória
             _entropy = LoadOrGenerateEntropy();
         }
@@ -33,14 +33,14 @@ namespace VPSFileManager.Services
         public List<SavedConnection> LoadConnections()
         {
             var connections = new List<SavedConnection>();
-            
+
             try
             {
                 if (!File.Exists(_filePath))
                     return connections;
 
                 var json = File.ReadAllText(_filePath);
-                
+
                 // Criar backup antes de processar
                 var backupPath = _filePath + ".bak";
                 try
@@ -48,7 +48,7 @@ namespace VPSFileManager.Services
                     File.Copy(_filePath, backupPath, overwrite: true);
                 }
                 catch { /* Ignorar erros de backup */ }
-                
+
                 var rawConnections = JsonSerializer.Deserialize<List<SavedConnection>>(json);
                 if (rawConnections == null)
                     return connections;
@@ -61,13 +61,13 @@ namespace VPSFileManager.Services
                         // Validar dados básicos
                         if (string.IsNullOrEmpty(conn.Host) || string.IsNullOrEmpty(conn.Username))
                             continue;
-                        
+
                         // Descriptografar senha
                         if (!string.IsNullOrEmpty(conn.EncryptedPassword))
                         {
                             conn.Password = DecryptPassword(conn.EncryptedPassword);
                         }
-                        
+
                         connections.Add(conn);
                     }
                     catch
@@ -106,7 +106,7 @@ namespace VPSFileManager.Services
         public void SaveConnections(List<SavedConnection> connections)
         {
             var tempFile = _filePath + ".tmp";
-            
+
             try
             {
                 // Criptografar senhas antes de salvar
@@ -125,13 +125,13 @@ namespace VPSFileManager.Services
                 }).ToList();
 
                 var json = JsonSerializer.Serialize(toSave, new JsonSerializerOptions { WriteIndented = true });
-                
+
                 // Escrever em arquivo temporário primeiro
                 File.WriteAllText(tempFile, json);
-                
+
                 // Limpar backups antigos antes de criar novo
                 CleanOldBackups();
-                
+
                 // Criar backup do arquivo atual (se existir)
                 if (File.Exists(_filePath))
                 {
@@ -142,7 +142,7 @@ namespace VPSFileManager.Services
                     }
                     catch { /* Ignorar erro de backup */ }
                 }
-                
+
                 // Mover arquivo temporário atomicamente
                 if (File.Exists(_filePath))
                     File.Delete(_filePath);
@@ -173,12 +173,12 @@ namespace VPSFileManager.Services
 
                 var fileName = Path.GetFileName(_filePath);
                 var backupPattern = fileName + ".bak*";
-                
+
                 // Encontrar todos os arquivos de backup
                 var backupFiles = Directory.GetFiles(directory, backupPattern)
                     .OrderByDescending(f => File.GetLastWriteTime(f))
                     .ToList();
-                
+
                 // Manter apenas o backup mais recente, deletar os outros
                 foreach (var oldBackup in backupFiles.Skip(1))
                 {
@@ -188,11 +188,11 @@ namespace VPSFileManager.Services
                     }
                     catch { /* Ignorar erros individuais */ }
                 }
-                
+
                 // Deletar também .tmp antigos (mais de 1 dia)
                 var tempFiles = Directory.GetFiles(directory, "*.tmp")
                     .Where(f => (DateTime.Now - File.GetLastWriteTime(f)).TotalDays > 1);
-                
+
                 foreach (var tempFile in tempFiles)
                 {
                     try
@@ -208,13 +208,13 @@ namespace VPSFileManager.Services
         public void AddConnection(SavedConnection connection)
         {
             var connections = LoadConnections();
-            
+
             // Verificar se já existe uma conexão com mesmo host e username
-            var existing = connections.FirstOrDefault(c => 
-                c.Host == connection.Host && 
+            var existing = connections.FirstOrDefault(c =>
+                c.Host == connection.Host &&
                 c.Username == connection.Username &&
                 c.Port == connection.Port);
-            
+
             if (existing != null)
             {
                 // Atualizar conexão existente
@@ -225,7 +225,7 @@ namespace VPSFileManager.Services
             {
                 connection.Id = Guid.NewGuid().ToString();
             }
-            
+
             connections.Add(connection);
             SaveConnections(connections);
         }

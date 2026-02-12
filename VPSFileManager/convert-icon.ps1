@@ -39,15 +39,15 @@ foreach ($bitmap in $bitmaps) {
     $writer.Write([byte]0)  # Reserved
     $writer.Write([UInt16]1)  # Color planes
     $writer.Write([UInt16]32)  # Bits per pixel
-    
+
     $ms = New-Object System.IO.MemoryStream
     $bitmap.Save($ms, [System.Drawing.Imaging.ImageFormat]::Png)
     $imageData = $ms.ToArray()
     $ms.Dispose()
-    
+
     $writer.Write([UInt32]$imageData.Length)  # Size of image data
     $writer.Write([UInt32]$offset)  # Offset to image data
-    
+
     $offset += $imageData.Length
 }
 

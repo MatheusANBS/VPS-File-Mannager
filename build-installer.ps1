@@ -26,7 +26,7 @@ function Get-DotNetSdk {
         "$env:ProgramFiles\dotnet\dotnet.exe",
         "${env:ProgramFiles(x86)}\dotnet\dotnet.exe"
     )
-    
+
     foreach ($path in $dotnetPaths) {
         if ($path -and (Test-Path $path)) {
             # Verificar se é SDK (não apenas runtime)
@@ -50,7 +50,7 @@ function Get-InnoSetup {
         "C:\Program Files\Inno Setup 6\ISCC.exe",
         "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe"
     )
-    
+
     foreach ($path in $innoPaths) {
         if (Test-Path $path) {
             return $path
@@ -61,21 +61,21 @@ function Get-InnoSetup {
 
 function Install-DotNetSdk {
     Write-Host "`nBaixando .NET SDK 8.0..." -ForegroundColor Cyan
-    
+
     $installerUrl = "https://dot.net/v1/dotnet-install.ps1"
     $installerPath = Join-Path $env:TEMP "dotnet-install.ps1"
-    
+
     try {
         Invoke-WebRequest -Uri $installerUrl -OutFile $installerPath -UseBasicParsing
         Write-Host "Instalando .NET SDK 8.0 (pode demorar alguns minutos)..." -ForegroundColor Cyan
-        
+
         # Instalar na pasta do usuário (não requer admin)
         $installDir = "$env:LOCALAPPDATA\Microsoft\dotnet"
         & $installerPath -Channel 8.0 -InstallDir $installDir
-        
+
         # Adicionar ao PATH da sessão atual
         $env:PATH = "$installDir;$env:PATH"
-        
+
         Write-Host ".NET SDK instalado com sucesso!" -ForegroundColor Green
         return "$installDir\dotnet.exe"
     }
@@ -92,22 +92,22 @@ function Install-DotNetSdk {
 
 function Install-InnoSetup {
     Write-Host "`nBaixando Inno Setup 6..." -ForegroundColor Cyan
-    
+
     $installerUrl = "https://jrsoftware.org/download.php/is.exe"
     $installerPath = Join-Path $env:TEMP "innosetup-installer.exe"
-    
+
     try {
         Invoke-WebRequest -Uri $installerUrl -OutFile $installerPath -UseBasicParsing
         Write-Host "Executando instalador do Inno Setup..." -ForegroundColor Cyan
         Write-Host "(Siga as instruções do instalador)" -ForegroundColor Yellow
-        
+
         # Executar instalador (instala em AppData por padrão, não requer admin)
         Start-Process -FilePath $installerPath -ArgumentList "/CURRENTUSER", "/SILENT" -Wait
-        
+
         # Verificar se foi instalado
         Start-Sleep -Seconds 2
         $innoPath = Get-InnoSetup
-        
+
         if ($innoPath) {
             Write-Host "Inno Setup instalado com sucesso!" -ForegroundColor Green
             return $innoPath
@@ -156,7 +156,7 @@ if (-not $dotnetPath) {
     Write-Host "O .NET SDK 8.0 é necessário para compilar o projeto." -ForegroundColor White
     Write-Host "Será baixado e instalado em: $env:LOCALAPPDATA\Microsoft\dotnet" -ForegroundColor Gray
     Write-Host "(Aproximadamente 200MB)" -ForegroundColor Gray
-    
+
     if (Confirm-Action "Deseja baixar e instalar o .NET SDK 8.0?") {
         $dotnetPath = Install-DotNetSdk
         if (-not $dotnetPath) {
@@ -181,7 +181,7 @@ else {
 $innoSetupPath = $null
 if (-not $SkipInstaller) {
     $innoSetupPath = Get-InnoSetup
-    
+
     if (-not $innoSetupPath) {
         Write-Host ""
         Write-Host "========================================" -ForegroundColor Yellow
@@ -191,7 +191,7 @@ if (-not $SkipInstaller) {
         Write-Host "O Inno Setup é necessário para criar o instalador." -ForegroundColor White
         Write-Host "Será baixado e instalado automaticamente." -ForegroundColor Gray
         Write-Host "(Aproximadamente 3MB)" -ForegroundColor Gray
-        
+
         if (Confirm-Action "Deseja baixar e instalar o Inno Setup 6?") {
             $innoSetupPath = Install-InnoSetup
         }

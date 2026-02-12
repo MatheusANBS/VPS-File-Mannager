@@ -775,13 +775,13 @@ namespace VPSFileManager.Controls
                     {
                         // Substituir \n por \r para o terminal
                         text = text.Replace("\r\n", "\r").Replace("\n", "\r");
-                        
+
                         // Wrap in bracketed paste if mode is enabled
                         if (_terminal.BracketedPasteMode)
                         {
                             text = "\x1b[200~" + text + "\x1b[201~";
                         }
-                        
+
                         DataInput?.Invoke(this, text);
                         _scrollOffset = 0;
                     }
